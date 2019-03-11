@@ -7,6 +7,7 @@
 //
 
 #import "AppDelegate.h"
+#import "BookBrowserViewController.h"
 
 @interface AppDelegate ()
 
@@ -16,7 +17,12 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-  // Override point for customization after application launch.
+
+  self.window = [[UIWindow alloc] initWithFrame:UIScreen.mainScreen.bounds];
+  BookBrowserViewController *bookBrowserVC = [[BookBrowserViewController alloc] initWithNibName:nil bundle:nil];
+  self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:bookBrowserVC];
+  [self.window makeKeyAndVisible];
+
   return YES;
 }
 
@@ -48,7 +54,6 @@
   // Saves changes in the application's managed object context before the application terminates.
   [self saveContext];
 }
-
 
 #pragma mark - Core Data stack
 

@@ -1,5 +1,5 @@
 //
-//  ViewController.h
+//  BookBrowserViewController.h
 //  MEReader
 //
 //  Created by Mohammed Ennabah on 3/8/19.
@@ -8,8 +8,11 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ViewController : UIViewController
+NS_ASSUME_NONNULL_BEGIN
+
+@interface BookBrowserViewController : UITableViewController
 
 
 @end
 
+NS_ASSUME_NONNULL_END

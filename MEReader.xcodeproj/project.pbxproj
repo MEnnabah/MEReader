@@ -7,15 +7,19 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		502C22E12235B09C00003F8A /* BookBrowserTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 502C22E02235B09C00003F8A /* BookBrowserTableViewCell.m */; };
+		502C22E42235B4CA00003F8A /* DownloadOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 502C22E32235B4CA00003F8A /* DownloadOperation.m */; };
+		502C22EA2235B8ED00003F8A /* NotificationName.m in Sources */ = {isa = PBXBuildFile; fileRef = 502C22E92235B8ED00003F8A /* NotificationName.m */; };
+		508866A42232C24B00E0C8CF /* BookViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 508866A22232BE5400E0C8CF /* BookViewController.m */; };
 		50A2577A223293530087A888 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 50A25779223293530087A888 /* AppDelegate.m */; };
-		50A2577D223293530087A888 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 50A2577C223293530087A888 /* ViewController.m */; };
-		50A25780223293530087A888 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 50A2577E223293530087A888 /* Main.storyboard */; };
 		50A25783223293530087A888 /* MEReader.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 50A25781223293530087A888 /* MEReader.xcdatamodeld */; };
 		50A25785223293550087A888 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 50A25784223293550087A888 /* Assets.xcassets */; };
 		50A25788223293550087A888 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 50A25786223293550087A888 /* LaunchScreen.storyboard */; };
 		50A2578B223293550087A888 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 50A2578A223293550087A888 /* main.m */; };
 		50A25795223293550087A888 /* MEReaderTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 50A25794223293550087A888 /* MEReaderTests.m */; };
 		50A257A0223293550087A888 /* MEReaderUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 50A2579F223293550087A888 /* MEReaderUITests.m */; };
+		50A257D722329E9F0087A888 /* BookBrowserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 50A257D622329E9F0087A888 /* BookBrowserViewController.m */; };
+		50D20ED12234298200FAECF3 /* Operation.m in Sources */ = {isa = PBXBuildFile; fileRef = 50D20ED02234298200FAECF3 /* Operation.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,12 +40,17 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		502C22DF2235B09C00003F8A /* BookBrowserTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BookBrowserTableViewCell.h; sourceTree = "<group>"; };
+		502C22E02235B09C00003F8A /* BookBrowserTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BookBrowserTableViewCell.m; sourceTree = "<group>"; };
+		502C22E22235B4CA00003F8A /* DownloadOperation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DownloadOperation.h; sourceTree = "<group>"; };
+		502C22E32235B4CA00003F8A /* DownloadOperation.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DownloadOperation.m; sourceTree = "<group>"; };
+		502C22E82235B8ED00003F8A /* NotificationName.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NotificationName.h; sourceTree = "<group>"; };
+		502C22E92235B8ED00003F8A /* NotificationName.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NotificationName.m; sourceTree = "<group>"; };
+		508866A12232BE5400E0C8CF /* BookViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BookViewController.h; sourceTree = "<group>"; };
+		508866A22232BE5400E0C8CF /* BookViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BookViewController.m; sourceTree = "<group>"; };
 		50A25775223293530087A888 /* MEReader.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MEReader.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		50A25778223293530087A888 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		50A25779223293530087A888 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		50A2577B223293530087A888 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		50A2577C223293530087A888 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
-		50A2577F223293530087A888 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		50A25782223293530087A888 /* MEReader.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = MEReader.xcdatamodel; sourceTree = "<group>"; };
 		50A25784223293550087A888 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		50A25787223293550087A888 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -53,6 +62,10 @@
 		50A2579B223293550087A888 /* MEReaderUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MEReaderUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		50A2579F223293550087A888 /* MEReaderUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MEReaderUITests.m; sourceTree = "<group>"; };
 		50A257A1223293550087A888 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		50A257D522329E9F0087A888 /* BookBrowserViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BookBrowserViewController.h; sourceTree = "<group>"; };
+		50A257D622329E9F0087A888 /* BookBrowserViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BookBrowserViewController.m; sourceTree = "<group>"; };
+		50D20ECF2234298200FAECF3 /* Operation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Operation.h; sourceTree = "<group>"; };
+		50D20ED02234298200FAECF3 /* Operation.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Operation.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -80,6 +93,69 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		502C22DD2235B07300003F8A /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				50A257D522329E9F0087A888 /* BookBrowserViewController.h */,
+				50A257D622329E9F0087A888 /* BookBrowserViewController.m */,
+			);
+			path = ViewController;
+			sourceTree = "<group>";
+		};
+		502C22DE2235B08000003F8A /* View */ = {
+			isa = PBXGroup;
+			children = (
+				502C22DF2235B09C00003F8A /* BookBrowserTableViewCell.h */,
+				502C22E02235B09C00003F8A /* BookBrowserTableViewCell.m */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		5088669C2232BDB200E0C8CF /* BookBrowser */ = {
+			isa = PBXGroup;
+			children = (
+				502C22DE2235B08000003F8A /* View */,
+				502C22DD2235B07300003F8A /* ViewController */,
+			);
+			path = BookBrowser;
+			sourceTree = "<group>";
+		};
+		5088669D2232BDCF00E0C8CF /* AppDelegate */ = {
+			isa = PBXGroup;
+			children = (
+				50A25778223293530087A888 /* AppDelegate.h */,
+				50A25779223293530087A888 /* AppDelegate.m */,
+			);
+			path = AppDelegate;
+			sourceTree = "<group>";
+		};
+		5088669E2232BDF100E0C8CF /* Assets */ = {
+			isa = PBXGroup;
+			children = (
+				50A25784223293550087A888 /* Assets.xcassets */,
+				50A25786223293550087A888 /* LaunchScreen.storyboard */,
+			);
+			path = Assets;
+			sourceTree = "<group>";
+		};
+		5088669F2232BE1300E0C8CF /* Helper */ = {
+			isa = PBXGroup;
+			children = (
+				50A25789223293550087A888 /* Info.plist */,
+				50A2578A223293550087A888 /* main.m */,
+			);
+			path = Helper;
+			sourceTree = "<group>";
+		};
+		508866A02232BE4600E0C8CF /* Book */ = {
+			isa = PBXGroup;
+			children = (
+				508866A12232BE5400E0C8CF /* BookViewController.h */,
+				508866A22232BE5400E0C8CF /* BookViewController.m */,
+			);
+			path = Book;
+			sourceTree = "<group>";
+		};
 		50A2576C223293530087A888 = {
 			isa = PBXGroup;
 			children = (
@@ -103,16 +179,15 @@
 		50A25777223293530087A888 /* MEReader */ = {
 			isa = PBXGroup;
 			children = (
-				50A25778223293530087A888 /* AppDelegate.h */,
-				50A25779223293530087A888 /* AppDelegate.m */,
-				50A2577B223293530087A888 /* ViewController.h */,
-				50A2577C223293530087A888 /* ViewController.m */,
-				50A2577E223293530087A888 /* Main.storyboard */,
-				50A25784223293550087A888 /* Assets.xcassets */,
-				50A25786223293550087A888 /* LaunchScreen.storyboard */,
-				50A25789223293550087A888 /* Info.plist */,
-				50A2578A223293550087A888 /* main.m */,
+				5088669D2232BDCF00E0C8CF /* AppDelegate */,
+				50D20ECE2234295F00FAECF3 /* Operation */,
+				5088669C2232BDB200E0C8CF /* BookBrowser */,
+				508866A02232BE4600E0C8CF /* Book */,
+				5088669E2232BDF100E0C8CF /* Assets */,
+				5088669F2232BE1300E0C8CF /* Helper */,
 				50A25781223293530087A888 /* MEReader.xcdatamodeld */,
+				502C22E82235B8ED00003F8A /* NotificationName.h */,
+				502C22E92235B8ED00003F8A /* NotificationName.m */,
 			);
 			path = MEReader;
 			sourceTree = "<group>";
@@ -133,6 +208,17 @@
 				50A257A1223293550087A888 /* Info.plist */,
 			);
 			path = MEReaderUITests;
+			sourceTree = "<group>";
+		};
+		50D20ECE2234295F00FAECF3 /* Operation */ = {
+			isa = PBXGroup;
+			children = (
+				50D20ECF2234298200FAECF3 /* Operation.h */,
+				50D20ED02234298200FAECF3 /* Operation.m */,
+				502C22E22235B4CA00003F8A /* DownloadOperation.h */,
+				502C22E32235B4CA00003F8A /* DownloadOperation.m */,
+			);
+			path = Operation;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -240,7 +326,6 @@
 			files = (
 				50A25788223293550087A888 /* LaunchScreen.storyboard in Resources */,
 				50A25785223293550087A888 /* Assets.xcassets in Resources */,
-				50A25780223293530087A888 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -265,10 +350,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				50A2577D223293530087A888 /* ViewController.m in Sources */,
+				508866A42232C24B00E0C8CF /* BookViewController.m in Sources */,
+				50A257D722329E9F0087A888 /* BookBrowserViewController.m in Sources */,
 				50A2577A223293530087A888 /* AppDelegate.m in Sources */,
+				50D20ED12234298200FAECF3 /* Operation.m in Sources */,
+				502C22E12235B09C00003F8A /* BookBrowserTableViewCell.m in Sources */,
 				50A2578B223293550087A888 /* main.m in Sources */,
+				502C22EA2235B8ED00003F8A /* NotificationName.m in Sources */,
 				50A25783223293530087A888 /* MEReader.xcdatamodeld in Sources */,
+				502C22E42235B4CA00003F8A /* DownloadOperation.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -304,14 +394,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		50A2577E223293530087A888 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				50A2577F223293530087A888 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		50A25786223293550087A888 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -441,7 +523,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = LC9DJLW34N;
-				INFOPLIST_FILE = MEReader/Info.plist;
+				INFOPLIST_FILE = MEReader/Helper/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -458,7 +541,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = LC9DJLW34N;
-				INFOPLIST_FILE = MEReader/Info.plist;
+				INFOPLIST_FILE = MEReader/Helper/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
