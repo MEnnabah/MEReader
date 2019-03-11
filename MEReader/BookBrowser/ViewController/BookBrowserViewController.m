@@ -54,20 +54,8 @@
   [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(onDownloadProgressNotification:) name:[NotificationName downloadProgress] object:nil];
 }
 
-- (void)onDownloadProgressNotification:(NSNotification *)notification {
-  NSNumber *progress = notification.userInfo[@"progress"];
-  NSString *bookID = notification.userInfo[@"bookID"];
-  
-  NSUInteger index = [self.books indexOfObjectPassingTest:^BOOL(Book * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-    return [obj.bookID isEqualToString:bookID];
-  }];
-  
-  [self.books objectAtIndex:index].downloadProgress = [progress floatValue];
-  [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:index inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
-}
-
 - (void)addNewBook:(UIBarButtonItem *)sender {
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"New Book" message:@"Provide the book URL, must be of PDF file format." preferredStyle:(UIAlertControllerStyleAlert)];
+  UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"New Book" message:@"Provide the book URL, must be of PDF file format." preferredStyle:(UIAlertControllerStyleAlert)];
   [alert addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
     textField.placeholder = @"https://mybook.pdf";
   }];
@@ -75,12 +63,12 @@
     [self startDownload:alert];
   }];
   UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
-
+  
   [alert addAction:download];
   [alert addAction:cancel];
   [self presentViewController:alert animated:YES completion:nil];
 }
-  
+
 - (void)startDownload:(UIAlertController *)alertController {
   NSString *url = alertController.textFields.firstObject.text;
   if (![self isStringAPDFURL:url]) {
@@ -91,17 +79,29 @@
   Book *b = [[Book alloc] initWithID:bookID];
   [self.books addObject:b];
   
-//  [self.tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:(self.books.count - 1) inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
+  //  [self.tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:(self.books.count - 1) inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
   [self.tableView reloadData];
   DownloadOperation *operation = [[DownloadOperation alloc] initWithURL:[NSURL URLWithString:url] bookID:bookID];
   [self.operationQueue addOperation:operation];
 }
-  
+
 - (BOOL)isStringAPDFURL:(NSString *)string {
   NSURL *url = [NSURL URLWithString:string];
   return (url && [url.pathExtension.lowercaseString isEqual: @"pdf"]);
 }
+
+- (void)onDownloadProgressNotification:(NSNotification *)notification {
+  NSNumber *progress = notification.userInfo[@"downloadProgress"];
+  NSString *bookID = notification.userInfo[@"bookID"];
   
+  NSUInteger index = [self.books indexOfObjectPassingTest:^BOOL(Book * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+    return [obj.bookID isEqualToString:bookID];
+  }];
+  
+  [self.books objectAtIndex:index].downloadProgress = [progress floatValue];
+  [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:index inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+}
+
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
   return 1;
 }

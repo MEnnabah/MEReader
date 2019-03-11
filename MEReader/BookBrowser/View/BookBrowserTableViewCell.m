@@ -18,35 +18,48 @@
 
 @implementation BookBrowserTableViewCell
 
-- (void)awakeFromNib {
-    [super awakeFromNib];
+
+- (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
   
-  [self.contentView addSubview:self.bookTitleLabel];
-  [self.contentView addSubview:self.progressBar];
-  [self.contentView addSubview:self.progressLabel];
+  self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
   
-  self.progressBar.hidden = YES;
-  self.progressLabel.hidden = YES;
+  if (self) {
+    
+    self.bookTitleLabel = [[UILabel alloc] init];
+    self.progressBar = [[UIProgressView alloc] init];
+    self.progressLabel = [[UILabel alloc] init];
+    
+    [self.contentView addSubview:self.bookTitleLabel];
+    [self.contentView addSubview:self.progressBar];
+    [self.contentView addSubview:self.progressLabel];
+    
+    self.progressBar.hidden = YES;
+    self.progressLabel.hidden = YES;
+    
+    [self.bookTitleLabel setTranslatesAutoresizingMaskIntoConstraints:NO];
+    [self.progressBar setTranslatesAutoresizingMaskIntoConstraints:NO];
+    [self.progressLabel setTranslatesAutoresizingMaskIntoConstraints:NO];
+    
+    [[self.bookTitleLabel.leadingAnchor constraintEqualToAnchor:self.contentView.leadingAnchor constant:8] setActive:YES];
+    [[self.bookTitleLabel.topAnchor constraintEqualToAnchor:self.contentView.topAnchor constant:8] setActive:YES];
+    [[self.bookTitleLabel.trailingAnchor constraintEqualToAnchor:self.contentView.trailingAnchor constant:-8] setActive:YES];
+    [[self.bookTitleLabel.bottomAnchor constraintEqualToAnchor:self.progressLabel.topAnchor constant:-8] setActive:YES];
+    
+    [[self.progressBar.leadingAnchor constraintEqualToAnchor:self.progressLabel.trailingAnchor constant:4] setActive:YES];
+    [[self.progressBar.trailingAnchor constraintEqualToAnchor:self.contentView.trailingAnchor constant:-4] setActive:YES];
+    [[self.progressBar.bottomAnchor constraintEqualToAnchor:self.contentView.bottomAnchor constant:-4] setActive:YES];
+    
+    [[self.progressLabel.leadingAnchor constraintEqualToAnchor:self.contentView.leadingAnchor constant:8] setActive:YES];
+    [[self.progressLabel.trailingAnchor constraintEqualToAnchor:self.progressLabel.trailingAnchor constant:-4] setActive:YES];
+    [[self.progressLabel.centerYAnchor constraintEqualToAnchor:self.progressBar.centerYAnchor] setActive:YES];
+    
+  }
   
-  [self.bookTitleLabel setTranslatesAutoresizingMaskIntoConstraints:NO];
-  [self.progressBar setTranslatesAutoresizingMaskIntoConstraints:NO];
-  [self.progressLabel setTranslatesAutoresizingMaskIntoConstraints:NO];
-  
-  [[self.bookTitleLabel.leadingAnchor constraintEqualToAnchor:self.contentView.leadingAnchor constant:8] setActive:YES];
-  [[self.bookTitleLabel.topAnchor constraintEqualToAnchor:self.contentView.topAnchor constant:8] setActive:YES];
-  [[self.bookTitleLabel.trailingAnchor constraintEqualToAnchor:self.contentView.trailingAnchor constant:-8] setActive:YES];
-  [[self.bookTitleLabel.bottomAnchor constraintEqualToAnchor:self.progressLabel.topAnchor constant:-8] setActive:YES];
-  
-  [[self.progressLabel.leadingAnchor constraintEqualToAnchor:self.contentView.leadingAnchor constant:8] setActive:YES];
-  [[self.progressLabel.bottomAnchor constraintEqualToAnchor:self.contentView.bottomAnchor constant:-8] setActive:YES];
-  
-  [[self.progressBar.leadingAnchor constraintEqualToAnchor:self.progressLabel.trailingAnchor constant:4] setActive:YES];
-  [[self.progressBar.trailingAnchor constraintEqualToAnchor:self.contentView.trailingAnchor constant:-4] setActive:YES];
-  [[self.progressBar.centerYAnchor constraintEqualToAnchor:self.contentView.centerYAnchor] setActive:YES];
+  return self;
 }
 
 - (void)updateProgressBar:(float)progress {
-  [self.progressBar setProgress:progress];
+  [self.progressBar setProgress:progress animated:YES];
 }
 
 - (void)setProgressText:(NSString *)text {
