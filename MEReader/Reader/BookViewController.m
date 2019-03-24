@@ -46,7 +46,6 @@
   [super viewDidAppear:animated];
   
   self.pdfView.autoScales = YES;
-
 }
 
 - (void)setupPDFView {

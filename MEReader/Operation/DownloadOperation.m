@@ -81,7 +81,7 @@ NSTimeInterval lastSaveTime; // throttle coredata save
  totalBytesWritten:(int64_t)totalBytesWritten
 totalBytesExpectedToWrite:(int64_t)totalBytesExpectedToWrite {
   float progress = (float)totalBytesWritten / (float)totalBytesExpectedToWrite;
-
+  
   NSDictionary *userInfo = @{
                              @"bookID": self.bookID,
                              @"downloadProgress": [NSNumber numberWithFloat:progress],
