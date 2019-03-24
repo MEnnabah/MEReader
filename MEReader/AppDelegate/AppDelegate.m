@@ -8,6 +8,7 @@
 
 #import "AppDelegate.h"
 #import "BookBrowserViewController.h"
+#import "MEReader+CoreDataModel.h"
 
 @interface AppDelegate ()
 
@@ -17,37 +18,38 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-
+  
   self.window = [[UIWindow alloc] initWithFrame:UIScreen.mainScreen.bounds];
   BookBrowserViewController *bookBrowserVC = [[BookBrowserViewController alloc] initWithNibName:nil bundle:nil];
   self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:bookBrowserVC];
   [self.window makeKeyAndVisible];
-
+  
   return YES;
 }
 
-
-- (void)applicationWillResignActive:(UIApplication *)application {
-  // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
-  // Use this method to pause ongoing tasks, disable timers, and invalidate graphics rendering callbacks. Games should use this method to pause the game.
+- (void)addTestData {
+//  NSManagedObjectContext *ctx = self.persistentContainer.viewContext;
+  for (int i = 0; i < 10; i++) {
+    Book *book = [[Book alloc] initWithContext:self.persistentContainer.viewContext];
+    [book setTitle:[NSString stringWithFormat:@"%iTitle", i]];
+    [book setUniqueID:[NSString stringWithFormat:@"%iID", i]];
+    [book setUrl:[NSString stringWithFormat:@"%iUrl", i]];
+  }
+  
+  NSError *saveError;
+  [self.persistentContainer.viewContext save:&saveError];
+  NSLog(@"%@", saveError);
 }
 
-
-- (void)applicationDidEnterBackground:(UIApplication *)application {
-  // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
-  // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+- (void)fetchTestData {
+  NSFetchRequest *fetchRequest = [Book fetchRequest];
+//  fetchRequest.predicate = [NSPredicate predicateWithFormat:@"title == %@", @"bTitle"];
+//  [fetchRequest setSortDescriptors:[NSArray arrayWithObjects:[[NSSortDescriptor alloc] initWithKey:@"title" ascending:YES], nil]];
+  NSError *fetchError;
+  NSArray<Book *> *books = [self.persistentContainer.viewContext executeFetchRequest:fetchRequest error:&fetchError];
+  NSLog(@"%@", books);
+  NSLog(@"%@", fetchError);
 }
-
-
-- (void)applicationWillEnterForeground:(UIApplication *)application {
-  // Called as part of the transition from the background to the active state; here you can undo many of the changes made on entering the background.
-}
-
-
-- (void)applicationDidBecomeActive:(UIApplication *)application {
-  // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
-}
-
 
 - (void)applicationWillTerminate:(UIApplication *)application {
   // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
@@ -68,7 +70,7 @@
                 if (error != nil) {
                     // Replace this implementation with code to handle the error appropriately.
                     // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-                    
+                  
                     /*
                      Typical reasons for an error here include:
                      * The parent directory does not exist, cannot be created, or disallows writing.
@@ -83,21 +85,25 @@
             }];
         }
     }
-    
+  
     return _persistentContainer;
 }
 
 #pragma mark - Core Data Saving support
 
 - (void)saveContext {
-    NSManagedObjectContext *context = self.persistentContainer.viewContext;
-    NSError *error = nil;
-    if ([context hasChanges] && ![context save:&error]) {
-        // Replace this implementation with code to handle the error appropriately.
-        // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-        NSLog(@"Unresolved error %@, %@", error, error.userInfo);
-        abort();
-    }
+  NSManagedObjectContext *context = self.persistentContainer.viewContext;
+  NSError *error = nil;
+  if ([context hasChanges] && ![context save:&error]) {
+    // Replace this implementation with code to handle the error appropriately.
+    // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
+    NSLog(@"Unresolved error %@, %@", error, error.userInfo);
+    abort();
+  }
+}
+
++ (AppDelegate *)sharedDelegate {
+  return (AppDelegate *)[[UIApplication sharedApplication] delegate];
 }
 
 @end

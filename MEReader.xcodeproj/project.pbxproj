@@ -20,6 +20,11 @@
 		50A257A0223293550087A888 /* MEReaderUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 50A2579F223293550087A888 /* MEReaderUITests.m */; };
 		50A257D722329E9F0087A888 /* BookBrowserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 50A257D622329E9F0087A888 /* BookBrowserViewController.m */; };
 		50D20ED12234298200FAECF3 /* Operation.m in Sources */ = {isa = PBXBuildFile; fileRef = 50D20ED02234298200FAECF3 /* Operation.m */; };
+		50F387CE2241283600977CF9 /* DownloadController.m in Sources */ = {isa = PBXBuildFile; fileRef = 50F387CD2241283600977CF9 /* DownloadController.m */; };
+		50F387E42241408E00977CF9 /* PersistenceManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 50F387E32241408E00977CF9 /* PersistenceManager.m */; };
+		50F3881E2241864F00977CF9 /* Book.m in Sources */ = {isa = PBXBuildFile; fileRef = 50F3881D2241864F00977CF9 /* Book.m */; };
+		50F38821224186CE00977CF9 /* DownloadInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 50F38820224186CE00977CF9 /* DownloadInfo.m */; };
+		50F388242241870D00977CF9 /* Note.m in Sources */ = {isa = PBXBuildFile; fileRef = 50F388232241870D00977CF9 /* Note.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -43,7 +48,7 @@
 		502C22DF2235B09C00003F8A /* BookBrowserTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BookBrowserTableViewCell.h; sourceTree = "<group>"; };
 		502C22E02235B09C00003F8A /* BookBrowserTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BookBrowserTableViewCell.m; sourceTree = "<group>"; };
 		502C22E22235B4CA00003F8A /* DownloadOperation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DownloadOperation.h; sourceTree = "<group>"; };
-		502C22E32235B4CA00003F8A /* DownloadOperation.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DownloadOperation.m; sourceTree = "<group>"; };
+		502C22E32235B4CA00003F8A /* DownloadOperation.m */ = {isa = PBXFileReference; indentWidth = 2; lastKnownFileType = sourcecode.c.objc; path = DownloadOperation.m; sourceTree = "<group>"; tabWidth = 2; usesTabs = 0; wrapsLines = 1; };
 		502C22E82235B8ED00003F8A /* NotificationName.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NotificationName.h; sourceTree = "<group>"; };
 		502C22E92235B8ED00003F8A /* NotificationName.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NotificationName.m; sourceTree = "<group>"; };
 		508866A12232BE5400E0C8CF /* BookViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BookViewController.h; sourceTree = "<group>"; };
@@ -66,6 +71,16 @@
 		50A257D622329E9F0087A888 /* BookBrowserViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BookBrowserViewController.m; sourceTree = "<group>"; };
 		50D20ECF2234298200FAECF3 /* Operation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Operation.h; sourceTree = "<group>"; };
 		50D20ED02234298200FAECF3 /* Operation.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Operation.m; sourceTree = "<group>"; };
+		50F387CC2241283600977CF9 /* DownloadController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DownloadController.h; sourceTree = "<group>"; };
+		50F387CD2241283600977CF9 /* DownloadController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DownloadController.m; sourceTree = "<group>"; };
+		50F387E22241408E00977CF9 /* PersistenceManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PersistenceManager.h; sourceTree = "<group>"; };
+		50F387E32241408E00977CF9 /* PersistenceManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PersistenceManager.m; sourceTree = "<group>"; };
+		50F3881C2241864F00977CF9 /* Book.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Book.h; sourceTree = "<group>"; };
+		50F3881D2241864F00977CF9 /* Book.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Book.m; sourceTree = "<group>"; };
+		50F3881F224186CE00977CF9 /* DownloadInfo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DownloadInfo.h; sourceTree = "<group>"; };
+		50F38820224186CE00977CF9 /* DownloadInfo.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DownloadInfo.m; sourceTree = "<group>"; };
+		50F388222241870D00977CF9 /* Note.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Note.h; sourceTree = "<group>"; };
+		50F388232241870D00977CF9 /* Note.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Note.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -111,13 +126,50 @@
 			path = View;
 			sourceTree = "<group>";
 		};
-		5088669C2232BDB200E0C8CF /* BookBrowser */ = {
+		504095B52237335C00BAB618 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				504095DB223733B800BAB618 /* Book */,
+				504095DA223733AD00BAB618 /* DownloadInfo */,
+				504095DC223733BF00BAB618 /* Note */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		504095DA223733AD00BAB618 /* DownloadInfo */ = {
+			isa = PBXGroup;
+			children = (
+				50F3881F224186CE00977CF9 /* DownloadInfo.h */,
+				50F38820224186CE00977CF9 /* DownloadInfo.m */,
+			);
+			path = DownloadInfo;
+			sourceTree = "<group>";
+		};
+		504095DB223733B800BAB618 /* Book */ = {
+			isa = PBXGroup;
+			children = (
+				50F3881C2241864F00977CF9 /* Book.h */,
+				50F3881D2241864F00977CF9 /* Book.m */,
+			);
+			path = Book;
+			sourceTree = "<group>";
+		};
+		504095DC223733BF00BAB618 /* Note */ = {
+			isa = PBXGroup;
+			children = (
+				50F388222241870D00977CF9 /* Note.h */,
+				50F388232241870D00977CF9 /* Note.m */,
+			);
+			path = Note;
+			sourceTree = "<group>";
+		};
+		5088669C2232BDB200E0C8CF /* Browser */ = {
 			isa = PBXGroup;
 			children = (
 				502C22DE2235B08000003F8A /* View */,
 				502C22DD2235B07300003F8A /* ViewController */,
 			);
-			path = BookBrowser;
+			path = Browser;
 			sourceTree = "<group>";
 		};
 		5088669D2232BDCF00E0C8CF /* AppDelegate */ = {
@@ -147,13 +199,13 @@
 			path = Helper;
 			sourceTree = "<group>";
 		};
-		508866A02232BE4600E0C8CF /* Book */ = {
+		508866A02232BE4600E0C8CF /* Reader */ = {
 			isa = PBXGroup;
 			children = (
 				508866A12232BE5400E0C8CF /* BookViewController.h */,
 				508866A22232BE5400E0C8CF /* BookViewController.m */,
 			);
-			path = Book;
+			path = Reader;
 			sourceTree = "<group>";
 		};
 		50A2576C223293530087A888 = {
@@ -179,18 +231,23 @@
 		50A25777223293530087A888 /* MEReader */ = {
 			isa = PBXGroup;
 			children = (
+				50F387E12241405C00977CF9 /* PersistenceManager */,
+				504095B52237335C00BAB618 /* Model */,
 				5088669D2232BDCF00E0C8CF /* AppDelegate */,
+				50F387CB2241257E00977CF9 /* Controller */,
 				50D20ECE2234295F00FAECF3 /* Operation */,
-				5088669C2232BDB200E0C8CF /* BookBrowser */,
-				508866A02232BE4600E0C8CF /* Book */,
+				5088669C2232BDB200E0C8CF /* Browser */,
+				508866A02232BE4600E0C8CF /* Reader */,
 				5088669E2232BDF100E0C8CF /* Assets */,
 				5088669F2232BE1300E0C8CF /* Helper */,
 				50A25781223293530087A888 /* MEReader.xcdatamodeld */,
 				502C22E82235B8ED00003F8A /* NotificationName.h */,
 				502C22E92235B8ED00003F8A /* NotificationName.m */,
 			);
+			indentWidth = 2;
 			path = MEReader;
 			sourceTree = "<group>";
+			tabWidth = 2;
 		};
 		50A25793223293550087A888 /* MEReaderTests */ = {
 			isa = PBXGroup;
@@ -219,6 +276,25 @@
 				502C22E32235B4CA00003F8A /* DownloadOperation.m */,
 			);
 			path = Operation;
+			sourceTree = "<group>";
+			wrapsLines = 0;
+		};
+		50F387CB2241257E00977CF9 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				50F387CC2241283600977CF9 /* DownloadController.h */,
+				50F387CD2241283600977CF9 /* DownloadController.m */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		50F387E12241405C00977CF9 /* PersistenceManager */ = {
+			isa = PBXGroup;
+			children = (
+				50F387E22241408E00977CF9 /* PersistenceManager.h */,
+				50F387E32241408E00977CF9 /* PersistenceManager.m */,
+			);
+			path = PersistenceManager;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -354,11 +430,16 @@
 				50A257D722329E9F0087A888 /* BookBrowserViewController.m in Sources */,
 				50A2577A223293530087A888 /* AppDelegate.m in Sources */,
 				50D20ED12234298200FAECF3 /* Operation.m in Sources */,
+				50F3881E2241864F00977CF9 /* Book.m in Sources */,
+				50F388242241870D00977CF9 /* Note.m in Sources */,
 				502C22E12235B09C00003F8A /* BookBrowserTableViewCell.m in Sources */,
+				50F387E42241408E00977CF9 /* PersistenceManager.m in Sources */,
 				50A2578B223293550087A888 /* main.m in Sources */,
+				50F387CE2241283600977CF9 /* DownloadController.m in Sources */,
 				502C22EA2235B8ED00003F8A /* NotificationName.m in Sources */,
 				50A25783223293530087A888 /* MEReader.xcdatamodeld in Sources */,
 				502C22E42235B4CA00003F8A /* DownloadOperation.m in Sources */,
+				50F38821224186CE00977CF9 /* DownloadInfo.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

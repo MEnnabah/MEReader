@@ -43,14 +43,14 @@
     [[self.bookTitleLabel.leadingAnchor constraintEqualToAnchor:self.contentView.leadingAnchor constant:8] setActive:YES];
     [[self.bookTitleLabel.topAnchor constraintEqualToAnchor:self.contentView.topAnchor constant:8] setActive:YES];
     [[self.bookTitleLabel.trailingAnchor constraintEqualToAnchor:self.contentView.trailingAnchor constant:-8] setActive:YES];
-    [[self.bookTitleLabel.bottomAnchor constraintEqualToAnchor:self.progressLabel.topAnchor constant:-8] setActive:YES];
     
-    [[self.progressBar.leadingAnchor constraintEqualToAnchor:self.progressLabel.trailingAnchor constant:4] setActive:YES];
-    [[self.progressBar.trailingAnchor constraintEqualToAnchor:self.contentView.trailingAnchor constant:-4] setActive:YES];
-    [[self.progressBar.bottomAnchor constraintEqualToAnchor:self.contentView.bottomAnchor constant:-4] setActive:YES];
+    [[self.progressBar.topAnchor constraintEqualToAnchor:self.bookTitleLabel.bottomAnchor constant:8] setActive:YES];
+    [[self.progressBar.leadingAnchor constraintEqualToAnchor:self.progressLabel.trailingAnchor constant:8] setActive:YES];
+    [[self.progressBar.trailingAnchor constraintEqualToAnchor:self.contentView.trailingAnchor constant:-12] setActive:YES];
+    [[self.progressBar.bottomAnchor constraintEqualToAnchor:self.contentView.bottomAnchor constant:-12] setActive:YES];
     
     [[self.progressLabel.leadingAnchor constraintEqualToAnchor:self.contentView.leadingAnchor constant:8] setActive:YES];
-    [[self.progressLabel.trailingAnchor constraintEqualToAnchor:self.progressLabel.trailingAnchor constant:-4] setActive:YES];
+    [[self.progressLabel.widthAnchor constraintLessThanOrEqualToAnchor:self.contentView.widthAnchor multiplier:0.25] setActive:YES];
     [[self.progressLabel.centerYAnchor constraintEqualToAnchor:self.progressBar.centerYAnchor] setActive:YES];
     
   }
