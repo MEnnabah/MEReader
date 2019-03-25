@@ -128,12 +128,15 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
   BookBrowserTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"BookCell" forIndexPath:indexPath];
   Book *book = [self.fetchedResultsController objectAtIndexPath:indexPath];
+  
   [cell setBookTitle: book.title];
+  [cell setProgressText: [[NSString alloc] initWithFormat:@"%2.0f %%", (book.downloadInfo.progress * 100)]];
+  
   [cell setProgressBarHidden:NO];
   [cell setProgressLabelHidden:NO];
   [cell updateProgressBar:book.downloadInfo.progress];
+  
   NSLog(@"%f", book.downloadInfo.progress);
-  [cell setProgressText:@"100%"];
   return cell;
 }
 
