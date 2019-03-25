@@ -79,7 +79,7 @@
   Book *book = [[Book alloc] initWithContext:self.container.viewContext];
   book.uniqueID = NSUUID.UUID.UUIDString;
   book.url = url;
-  book.title = @"The love of my Wi-Fi";
+  book.title = [NSString stringWithFormat:@"Book no. %@", @(self.fetchedResultsController.sections[0].objects.count + 1)];
   [DownloadController.sharedInstance downloadBook:book];
 }
 
