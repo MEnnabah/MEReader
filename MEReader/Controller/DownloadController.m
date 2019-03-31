@@ -14,6 +14,7 @@
 @interface DownloadController ()
 
 @property (nonatomic, strong) NSOperationQueue *downloadQueue;
+@property (nonatomic, strong) NSManagedObjectContext *context;
 
 @end
 
@@ -32,8 +33,8 @@
   self = [super init];
   if (self) {
     self.downloadQueue = [[NSOperationQueue alloc] init];
-    [self.downloadQueue setSuspended:YES];
     self.downloadQueue.maxConcurrentOperationCount = 1;
+    self.context = AppDelegate.sharedDelegate.persistentContainer.viewContext;
   }
   return self;
 }
@@ -42,20 +43,17 @@
   if (!book.url) {
     return;
   }
-
-  NSManagedObjectContext *context = AppDelegate.sharedDelegate.persistentContainer.viewContext;
-  DownloadInfo *downloadInfo = [[DownloadInfo alloc] initWithContext:context];
+  
+  DownloadInfo *downloadInfo = [[DownloadInfo alloc] initWithContext:self.context];
   downloadInfo.downloadedAt = [[NSDate alloc] init];
   downloadInfo.downloadState = DownloadStatePending;
   downloadInfo.book = book;
   downloadInfo.progress = 0;
   NSError *contextSaveError;
-  [context save:&contextSaveError];
+  [self.context save:&contextSaveError];
 
-  NSURL *bookURL = [NSURL URLWithString:book.url];
-  DownloadOperation *downloadOperation = [[DownloadOperation alloc] initWithURL:bookURL bookID:book.uniqueID];
+  DownloadOperation *downloadOperation = [[DownloadOperation alloc] initBook:book];
   [self.downloadQueue addOperation:downloadOperation];
-  [self.downloadQueue setSuspended:NO];
 }
 
 

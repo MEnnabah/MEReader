@@ -82,4 +82,9 @@
   return self.bookTitleLabel.text;
 }
 
+- (void)prepareForReuse {
+  [super prepareForReuse];
+  [self.progressBar setProgress:0.0 animated:NO];
+}
+
 @end

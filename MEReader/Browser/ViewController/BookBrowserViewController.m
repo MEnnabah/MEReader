@@ -18,7 +18,6 @@
 
 @interface BookBrowserViewController () <NSFetchedResultsControllerDelegate>
 
-@property (nonatomic, strong) NSMutableArray *books;
 @property (nonatomic, strong) NSFetchedResultsController<Book *> *fetchedResultsController;
 @property (nonatomic, strong) NSPersistentContainer* container;
 
@@ -28,20 +27,18 @@
 
 - (void)viewDidLoad {
   [super viewDidLoad];
-  self.books = [NSMutableArray array];
   self.container = AppDelegate.sharedDelegate.persistentContainer;
   
   self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addNewURL:)];
   [self.navigationItem.leftBarButtonItem setEnabled:NO];
   [self.tableView registerClass:[BookBrowserTableViewCell class] forCellReuseIdentifier:@"BookCell"];
   
-  [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(downloadProgressNotification:) name:[NotificationName downloadProgress] object:nil];
   [self loadSavedBooks];
 }
 
 - (void)loadSavedBooks {
   NSFetchRequest *fetchRequest = [Book fetchRequest];
-  fetchRequest.sortDescriptors = [NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"uniqueID" ascending:YES]];
+  fetchRequest.sortDescriptors = [NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"downloadInfo.downloadedAt" ascending:NO]];
   self.fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
                                                                       managedObjectContext:self.container.viewContext
                                                                         sectionNameKeyPath:nil
@@ -49,8 +46,12 @@
   self.fetchedResultsController.delegate = self;
   NSError *fetchError;
   BOOL fetched = [self.fetchedResultsController performFetch:&fetchError];
-  NSLog(@"did fetch books?: %i", fetched);
-  NSLog(@"%@", fetchError);
+  if (fetched == YES) {
+    NSLog(@"did fetch books? %i", fetched);
+  }
+  if (fetchError) {
+    NSLog(@"%@", fetchError);
+  }
   dispatch_async(dispatch_get_main_queue(), ^{
     [self.tableView reloadData];
   });
@@ -88,35 +89,6 @@
   return (url && [url.pathExtension.lowercaseString isEqual: @"pdf"]);
 }
 
-- (void)downloadProgressNotification:(NSNotification *)notification {
-  NSNumber *progress = notification.userInfo[@"downloadProgress"];
-  NSString *bookID = notification.userInfo[@"bookID"];
-  Book *associatedBook = [self bookWithID:bookID];
-  associatedBook.downloadInfo.progress = [progress floatValue];
-  NSIndexPath *associatedBookIndexPath = [self indexPathForBook:associatedBook];
-  if ([[self.tableView indexPathsForVisibleRows] containsObject:associatedBookIndexPath]) {
-    [self.tableView reloadRowsAtIndexPaths:@[associatedBookIndexPath] withRowAnimation:UITableViewRowAnimationNone];
-    NSLog(@"Reloading row");
-  } else {
-    NSLog(@"Row not visisble");
-  }
-}
-
-- (Book *)bookWithID:(NSString *)bookID {
-  __block Book* book;
-  [self.fetchedResultsController.fetchedObjects enumerateObjectsUsingBlock:^(Book * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-    if (obj.uniqueID == bookID) {
-      book = obj;
-      *stop = YES;
-    }
-  }];
-  return book;
-}
-
-- (NSIndexPath *)indexPathForBook:(Book *)book {
-  return [self.fetchedResultsController indexPathForObject:book];
-}
-
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
   return 1;
 }
@@ -136,8 +108,11 @@
   [cell setProgressLabelHidden:NO];
   [cell updateProgressBar:book.downloadInfo.progress];
   
-  NSLog(@"%f", book.downloadInfo.progress);
   return cell;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+  
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
@@ -150,8 +125,19 @@
   [self presentViewController:bookNavigationController animated:YES completion:nil];
 }
 
-- (void)controllerDidChangeContent:(NSFetchedResultsController *)controller {
-  NSLog(@"%@", controller);
-  [self loadSavedBooks];
+- (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject atIndexPath:(NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type newIndexPath:(NSIndexPath *)newIndexPath {
+  switch (type) {
+    case NSFetchedResultsChangeInsert:
+      [self.tableView insertRowsAtIndexPaths:@[newIndexPath] withRowAnimation:UITableViewRowAnimationLeft];
+      break;
+    case NSFetchedResultsChangeUpdate:
+      [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+      break;
+    default:
+      NSLog(@"NSFetchedResultsChangeType case that we don't yet handle");
+      break;
+  }
 }
+
+
 @end

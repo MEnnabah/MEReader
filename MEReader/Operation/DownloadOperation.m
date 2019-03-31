@@ -14,22 +14,23 @@
 @interface DownloadOperation () <NSURLSessionDownloadDelegate>
 
 @property (nonatomic, strong) NSURLSessionDownloadTask *downloadTask;
+@property (nonatomic, strong) NSURLSession *session;
+@property (nonatomic, strong) NSManagedObjectContext *context;
+@property (nonatomic) NSTimeInterval lastSaveTime;  // throttle coredata save
 
 @end
 
 @implementation DownloadOperation
 
-DownloadInfo *_downloadInfo;
-NSURLSession *_session;
-NSManagedObjectContext *_context;
-NSTimeInterval lastSaveTime; // throttle coredata save
 
-- (instancetype)initWithURL:(NSURL *)url bookID:(NSString *)bookID {
+- (instancetype)initBook:(Book *)book {
   self = [super init];
   if (self) {
-    self.url = url;
-    self.bookID = bookID;
-    lastSaveTime = [[NSDate date] timeIntervalSince1970];
+    self.book = book;
+    self.session = [NSURLSession sessionWithConfiguration:NSURLSessionConfiguration.defaultSessionConfiguration
+                                  delegate:self
+                             delegateQueue:nil];
+    self.lastSaveTime = [[NSDate date] timeIntervalSince1970];
   }
   return self;
 }
@@ -37,41 +38,21 @@ NSTimeInterval lastSaveTime; // throttle coredata save
 - (NSManagedObjectContext *)context {
   if (!_context) {
     dispatch_async(dispatch_get_main_queue(), ^{
-      _context = AppDelegate.sharedDelegate.persistentContainer.newBackgroundContext;
+      self.context = AppDelegate.sharedDelegate.persistentContainer.newBackgroundContext;
     });
   }
   return _context;
 }
 
-- (DownloadInfo *)downloadInfo {
-  if (!_downloadInfo) {
-    NSFetchRequest *downloadInfoFetchRequest = [DownloadInfo fetchRequest];
-    downloadInfoFetchRequest.predicate = [NSPredicate predicateWithFormat:@"book.uniqueID = %@", self.bookID];
-    downloadInfoFetchRequest.fetchLimit = 1;
-    NSError *downloadInfoFetchRequestError;
-    _downloadInfo = [[self context] executeFetchRequest:downloadInfoFetchRequest error:&downloadInfoFetchRequestError].firstObject;
-  }
-  return _downloadInfo;
-}
-
-- (NSURLSession *)session {
-  if (!_session) {
-    _session = [NSURLSession sessionWithConfiguration:NSURLSessionConfiguration.defaultSessionConfiguration
-                                             delegate:self
-                                        delegateQueue:nil];
-  }
-  return _session;
-}
-
 - (void)execute {
-  _downloadInfo.downloadState = DownloadStateDownloading;
+  self.book.downloadInfo.downloadState = DownloadStateDownloading;
   [self saveWithCurrentContext];
-  self.downloadTask = [[self session] downloadTaskWithURL:self.url];
+  self.downloadTask = [[self session] downloadTaskWithURL:[NSURL URLWithString:self.book.url]];
   [self.downloadTask resume];
 }
 
 - (void)cancel {
-  [self downloadInfo].downloadState = DownloadStatePaused;
+  self.book.downloadInfo.downloadState = DownloadStatePaused;
   [self saveWithCurrentContext];
   [self.downloadTask cancel];
 }
@@ -82,24 +63,17 @@ NSTimeInterval lastSaveTime; // throttle coredata save
 totalBytesExpectedToWrite:(int64_t)totalBytesExpectedToWrite {
   float progress = (float)totalBytesWritten / (float)totalBytesExpectedToWrite;
   
-  NSDictionary *userInfo = @{
-                             @"bookID": self.bookID,
-                             @"downloadProgress": [NSNumber numberWithFloat:progress],
-                             @"totalBytesWritten": [NSNumber numberWithLongLong:totalBytesWritten],
-                             @"totalBytesExpectedToWrite": [NSNumber numberWithLongLong:totalBytesExpectedToWrite]
-                             };
-  
-  dispatch_async(dispatch_get_main_queue(), ^{
-    [NSNotificationCenter.defaultCenter postNotificationName:[NotificationName downloadProgress] object:self userInfo:userInfo];
-  });
-  
-  [self downloadInfo].progress = progress;
-  [self downloadInfo].sizeInBytes = totalBytesWritten;
+  self.book.downloadInfo.progress = progress;
+  self.book.downloadInfo.sizeInBytes = totalBytesWritten;
+  self.book.title = self.book.title;
   
   // throttle save
   NSTimeInterval now = [[NSDate date] timeIntervalSince1970];
-  if ((now - lastSaveTime >= 0.5) || (progress == 1.0)) {
-    lastSaveTime = [[NSDate date] timeIntervalSince1970];
+  if ((now - self.lastSaveTime >= 0.5) || (progress == 1.0)) {
+    if (progress == 1.0) {
+      NSLog(@"Progress is 100");
+    }
+    self.lastSaveTime = [[NSDate date] timeIntervalSince1970];
     [self saveWithCurrentContext];
   }
   
@@ -118,12 +92,12 @@ totalBytesExpectedToWrite:(int64_t)totalBytesExpectedToWrite {
   if (error) {
     NSLog(@"%@", error.localizedDescription);
     if (error.domain == NSURLErrorDomain && error.code == NSURLErrorCancelled) {
-      [self downloadInfo].downloadState = DownloadStatePaused;
+      self.book.downloadInfo.downloadState = DownloadStatePaused;
     } else {
-      [self downloadInfo].downloadState = DownloadStateFailed;
+      self.book.downloadInfo.downloadState = DownloadStateFailed;
     }
   } else {
-    [self downloadInfo].downloadState = DownloadStateCompleted;
+    self.book.downloadInfo.downloadState = DownloadStateCompleted;
   }
   [self saveWithCurrentContext];
   [self finish];
@@ -157,9 +131,9 @@ totalBytesExpectedToWrite:(int64_t)totalBytesExpectedToWrite {
   }
   
   [[self context] performBlockAndWait:^{
-    [self downloadInfo].progress = 1.0;
-    [self downloadInfo].sizeInBytes = [(NSNumber *)attrs[NSFileSize] intValue];
-    [self downloadInfo].path = newLocation.path;
+    self.book.downloadInfo.progress = 1.0;
+    self.book.downloadInfo.sizeInBytes = [(NSNumber *)attrs[NSFileSize] intValue];
+    self.book.downloadInfo.path = newLocation.path;
   }];
   
   NSLog(@"File downloaded at: %@", location.absoluteString);
