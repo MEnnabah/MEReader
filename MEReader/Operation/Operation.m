@@ -19,7 +19,7 @@ BOOL _isExecuting;
   return _isExecuting;
 }
 
-BOOL _isFinished;;
+BOOL _isFinished;
 - (BOOL)isFinished {
   return _isFinished;
 }
@@ -33,7 +33,7 @@ BOOL _isFinished;;
 }
 
 - (void)execute {
-  [NSException raise:@"OperationException" format:@"You must override this and provide your own execution, without calling super"];
+  [NSException raise:@"OperationException" format:@"You must override %s and provide your own execution, without calling super", __PRETTY_FUNCTION__];
 }
 
 - (void)finish {

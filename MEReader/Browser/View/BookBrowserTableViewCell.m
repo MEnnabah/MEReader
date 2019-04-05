@@ -50,7 +50,7 @@
     [[self.progressBar.bottomAnchor constraintEqualToAnchor:self.contentView.bottomAnchor constant:-12] setActive:YES];
     
     [[self.progressLabel.leadingAnchor constraintEqualToAnchor:self.contentView.leadingAnchor constant:8] setActive:YES];
-    [[self.progressLabel.widthAnchor constraintLessThanOrEqualToAnchor:self.contentView.widthAnchor multiplier:0.25] setActive:YES];
+    [[self.progressLabel.widthAnchor constraintEqualToAnchor:self.contentView.widthAnchor multiplier:0.15] setActive:YES];
     [[self.progressLabel.centerYAnchor constraintEqualToAnchor:self.progressBar.centerYAnchor] setActive:YES];
     
   }

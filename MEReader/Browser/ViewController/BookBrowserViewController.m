@@ -28,27 +28,24 @@
 - (void)viewDidLoad {
   [super viewDidLoad];
   self.container = AppDelegate.sharedDelegate.persistentContainer;
-  
   self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addNewURL:)];
   [self.navigationItem.leftBarButtonItem setEnabled:NO];
   [self.tableView registerClass:[BookBrowserTableViewCell class] forCellReuseIdentifier:@"BookCell"];
-  
   [self loadSavedBooks];
 }
 
 - (void)loadSavedBooks {
   NSFetchRequest *fetchRequest = [Book fetchRequest];
   fetchRequest.sortDescriptors = [NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"downloadInfo.downloadedAt" ascending:NO]];
-  self.fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
-                                                                      managedObjectContext:self.container.viewContext
-                                                                        sectionNameKeyPath:nil
-                                                                                 cacheName:nil];
+  self.fetchedResultsController = [[NSFetchedResultsController alloc]
+                                   initWithFetchRequest:fetchRequest
+                                   managedObjectContext:self.container.viewContext
+                                   sectionNameKeyPath:nil
+                                   cacheName:nil];
+  
   self.fetchedResultsController.delegate = self;
   NSError *fetchError;
-  BOOL fetched = [self.fetchedResultsController performFetch:&fetchError];
-  if (fetched == YES) {
-    NSLog(@"did fetch books? %i", fetched);
-  }
+  [self.fetchedResultsController performFetch:&fetchError];
   if (fetchError) {
     NSLog(@"%@", fetchError);
   }
@@ -103,7 +100,6 @@
   
   [cell setBookTitle: book.title];
   [cell setProgressText: [[NSString alloc] initWithFormat:@"%2.0f %%", (book.downloadInfo.progress * 100)]];
-  
   [cell setProgressBarHidden:NO];
   [cell setProgressLabelHidden:NO];
   [cell updateProgressBar:book.downloadInfo.progress];
@@ -138,6 +134,5 @@
       break;
   }
 }
-
 
 @end

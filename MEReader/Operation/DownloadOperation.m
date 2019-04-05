@@ -22,10 +22,10 @@
 
 @implementation DownloadOperation
 
-
 - (instancetype)initBook:(Book *)book {
   self = [super init];
   if (self) {
+    NSLog(@"Initing download operation %@", self);
     self.book = book;
     self.session = [NSURLSession sessionWithConfiguration:NSURLSessionConfiguration.defaultSessionConfiguration
                                   delegate:self
@@ -37,8 +37,9 @@
 
 - (NSManagedObjectContext *)context {
   if (!_context) {
+    __weak DownloadOperation *weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
-      self.context = AppDelegate.sharedDelegate.persistentContainer.newBackgroundContext;
+      weakSelf.context = AppDelegate.sharedDelegate.persistentContainer.newBackgroundContext;
     });
   }
   return _context;
@@ -47,7 +48,7 @@
 - (void)execute {
   self.book.downloadInfo.downloadState = DownloadStateDownloading;
   [self saveWithCurrentContext];
-  self.downloadTask = [[self session] downloadTaskWithURL:[NSURL URLWithString:self.book.url]];
+  self.downloadTask = [self.session downloadTaskWithURL:[NSURL URLWithString:self.book.url]];
   [self.downloadTask resume];
 }
 
@@ -55,12 +56,14 @@
   self.book.downloadInfo.downloadState = DownloadStatePaused;
   [self saveWithCurrentContext];
   [self.downloadTask cancel];
+  [self finish];
 }
 
 - (void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)downloadTask
       didWriteData:(int64_t)bytesWritten
  totalBytesWritten:(int64_t)totalBytesWritten
 totalBytesExpectedToWrite:(int64_t)totalBytesExpectedToWrite {
+  
   float progress = (float)totalBytesWritten / (float)totalBytesExpectedToWrite;
   
   self.book.downloadInfo.progress = progress;
@@ -70,9 +73,6 @@ totalBytesExpectedToWrite:(int64_t)totalBytesExpectedToWrite {
   // throttle save
   NSTimeInterval now = [[NSDate date] timeIntervalSince1970];
   if ((now - self.lastSaveTime >= 0.5) || (progress == 1.0)) {
-    if (progress == 1.0) {
-      NSLog(@"Progress is 100");
-    }
     self.lastSaveTime = [[NSDate date] timeIntervalSince1970];
     [self saveWithCurrentContext];
   }
@@ -103,6 +103,11 @@ totalBytesExpectedToWrite:(int64_t)totalBytesExpectedToWrite {
   [self finish];
 }
 
+- (void)finish {
+  [self.session finishTasksAndInvalidate];
+  [super finish];
+}
+
 - (void)URLSession:(nonnull NSURLSession *)session downloadTask:(nonnull NSURLSessionDownloadTask *)downloadTask didFinishDownloadingToURL:(nonnull NSURL *)location {
   
   NSString *ext = downloadTask.currentRequest.URL.pathExtension;
@@ -130,14 +135,16 @@ totalBytesExpectedToWrite:(int64_t)totalBytesExpectedToWrite {
     NSLog(@"Attributes error %@", fileManagerAttributesError.localizedDescription);
   }
   
+  __weak DownloadOperation *weakSelf = self;
   [[self context] performBlockAndWait:^{
-    self.book.downloadInfo.progress = 1.0;
-    self.book.downloadInfo.sizeInBytes = [(NSNumber *)attrs[NSFileSize] intValue];
-    self.book.downloadInfo.path = newLocation.path;
+    weakSelf.book.downloadInfo.progress = 1.0;
+    weakSelf.book.downloadInfo.sizeInBytes = [(NSNumber *)attrs[NSFileSize] intValue];
+    weakSelf.book.downloadInfo.path = newLocation.path;
   }];
-  
-  NSLog(@"File downloaded at: %@", location.absoluteString);
-  NSLog(@"File moved to %@", newLocation.absoluteString);
+}
+
+- (void)dealloc {
+  NSLog(@"Deallocating operation %@", self);
 }
 
 @end
