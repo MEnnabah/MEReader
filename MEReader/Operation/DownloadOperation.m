@@ -22,10 +22,11 @@
 
 @implementation DownloadOperation
 
+#pragma mark - Initializer
+
 - (instancetype)initBook:(Book *)book {
   self = [super init];
   if (self) {
-    NSLog(@"Initing download operation %@", self);
     self.book = book;
     self.session = [NSURLSession sessionWithConfiguration:NSURLSessionConfiguration.defaultSessionConfiguration
                                   delegate:self
@@ -34,6 +35,8 @@
   }
   return self;
 }
+
+#pragma mark - Helpers
 
 - (NSManagedObjectContext *)context {
   if (!_context) {
@@ -44,6 +47,16 @@
   }
   return _context;
 }
+
+- (void)saveWithCurrentContext {
+  NSError *saveError;
+  [[self context] save:&saveError];
+  if (saveError) {
+    NSLog(@"Error saving context %@", saveError.localizedDescription);
+  }
+}
+
+#pragma mark - Override
 
 - (void)execute {
   self.book.downloadInfo.downloadState = DownloadStateDownloading;
@@ -58,6 +71,13 @@
   [self.downloadTask cancel];
   [self finish];
 }
+
+- (void)finish {
+  [self.session finishTasksAndInvalidate];
+  [super finish];
+}
+
+#pragma mark - NSURLSessionDownloadDelegate
 
 - (void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)downloadTask
       didWriteData:(int64_t)bytesWritten
@@ -79,14 +99,6 @@ totalBytesExpectedToWrite:(int64_t)totalBytesExpectedToWrite {
   
 }
 
-- (void)saveWithCurrentContext {
-  NSError *saveError;
-  [[self context] save:&saveError];
-  if (saveError) {
-    NSLog(@"Error saving context %@", saveError.localizedDescription);
-  }
-}
-
 - (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didCompleteWithError:(NSError *)error {
   
   if (error) {
@@ -101,11 +113,6 @@ totalBytesExpectedToWrite:(int64_t)totalBytesExpectedToWrite {
   }
   [self saveWithCurrentContext];
   [self finish];
-}
-
-- (void)finish {
-  [self.session finishTasksAndInvalidate];
-  [super finish];
 }
 
 - (void)URLSession:(nonnull NSURLSession *)session downloadTask:(nonnull NSURLSessionDownloadTask *)downloadTask didFinishDownloadingToURL:(nonnull NSURL *)location {
@@ -141,10 +148,6 @@ totalBytesExpectedToWrite:(int64_t)totalBytesExpectedToWrite {
     weakSelf.book.downloadInfo.sizeInBytes = [(NSNumber *)attrs[NSFileSize] intValue];
     weakSelf.book.downloadInfo.path = newLocation.path;
   }];
-}
-
-- (void)dealloc {
-  NSLog(@"Deallocating operation %@", self);
 }
 
 @end
