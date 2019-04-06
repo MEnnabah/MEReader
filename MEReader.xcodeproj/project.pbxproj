@@ -19,6 +19,8 @@
 		50A25795223293550087A888 /* MEReaderTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 50A25794223293550087A888 /* MEReaderTests.m */; };
 		50A257A0223293550087A888 /* MEReaderUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 50A2579F223293550087A888 /* MEReaderUITests.m */; };
 		50A257D722329E9F0087A888 /* BookBrowserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 50A257D622329E9F0087A888 /* BookBrowserViewController.m */; };
+		50CB6E4B2259245C0069FD34 /* PieProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = 50CB6E4A2259245C0069FD34 /* PieProgressView.m */; };
+		50CB6E51225924E40069FD34 /* PieProgressLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 50CB6E50225924E40069FD34 /* PieProgressLayer.m */; };
 		50D20ED12234298200FAECF3 /* Operation.m in Sources */ = {isa = PBXBuildFile; fileRef = 50D20ED02234298200FAECF3 /* Operation.m */; };
 		50F387CE2241283600977CF9 /* DownloadController.m in Sources */ = {isa = PBXBuildFile; fileRef = 50F387CD2241283600977CF9 /* DownloadController.m */; };
 		50F387E42241408E00977CF9 /* PersistenceManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 50F387E32241408E00977CF9 /* PersistenceManager.m */; };
@@ -69,6 +71,10 @@
 		50A257A1223293550087A888 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		50A257D522329E9F0087A888 /* BookBrowserViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BookBrowserViewController.h; sourceTree = "<group>"; };
 		50A257D622329E9F0087A888 /* BookBrowserViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BookBrowserViewController.m; sourceTree = "<group>"; };
+		50CB6E492259245C0069FD34 /* PieProgressView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PieProgressView.h; sourceTree = "<group>"; };
+		50CB6E4A2259245C0069FD34 /* PieProgressView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PieProgressView.m; sourceTree = "<group>"; };
+		50CB6E4F225924E40069FD34 /* PieProgressLayer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PieProgressLayer.h; sourceTree = "<group>"; };
+		50CB6E50225924E40069FD34 /* PieProgressLayer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PieProgressLayer.m; sourceTree = "<group>"; };
 		50D20ECF2234298200FAECF3 /* Operation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Operation.h; sourceTree = "<group>"; };
 		50D20ED02234298200FAECF3 /* Operation.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Operation.m; sourceTree = "<group>"; wrapsLines = 1; };
 		50F387CC2241283600977CF9 /* DownloadController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DownloadController.h; sourceTree = "<group>"; };
@@ -108,6 +114,25 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		5021495E2259094400D89FD4 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				5021496222590C9D00D89FD4 /* PieProgressView */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		5021496222590C9D00D89FD4 /* PieProgressView */ = {
+			isa = PBXGroup;
+			children = (
+				50CB6E492259245C0069FD34 /* PieProgressView.h */,
+				50CB6E4A2259245C0069FD34 /* PieProgressView.m */,
+				50CB6E4F225924E40069FD34 /* PieProgressLayer.h */,
+				50CB6E50225924E40069FD34 /* PieProgressLayer.m */,
+			);
+			path = PieProgressView;
+			sourceTree = "<group>";
+		};
 		502C22DD2235B07300003F8A /* ViewController */ = {
 			isa = PBXGroup;
 			children = (
@@ -231,6 +256,7 @@
 		50A25777223293530087A888 /* MEReader */ = {
 			isa = PBXGroup;
 			children = (
+				5021495E2259094400D89FD4 /* View */,
 				50F387E12241405C00977CF9 /* PersistenceManager */,
 				504095B52237335C00BAB618 /* Model */,
 				50F387CB2241257E00977CF9 /* Controller */,
@@ -439,7 +465,9 @@
 				502C22EA2235B8ED00003F8A /* NotificationName.m in Sources */,
 				50A25783223293530087A888 /* MEReader.xcdatamodeld in Sources */,
 				502C22E42235B4CA00003F8A /* DownloadOperation.m in Sources */,
+				50CB6E51225924E40069FD34 /* PieProgressLayer.m in Sources */,
 				50F38821224186CE00977CF9 /* DownloadInfo.m in Sources */,
+				50CB6E4B2259245C0069FD34 /* PieProgressView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
