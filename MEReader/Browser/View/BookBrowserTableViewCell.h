@@ -15,7 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)updateProgressBar:(float)progress;
 - (void)setProgressText:(NSString *)text;
 
-- (void)setProgressBarHidden:(BOOL)hidden;
+- (void)setProgressViewHidden:(BOOL)hidden;
 - (void)setProgressLabelHidden:(BOOL)hidden;
 
 - (void)setBookTitle:(NSString *)title;

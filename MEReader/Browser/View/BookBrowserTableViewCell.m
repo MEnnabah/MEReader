@@ -33,10 +33,18 @@
     [self.contentView addSubview:self.progressView];
     [self.contentView addSubview:self.progressLabel];
     
+    [self setProgressViewHidden:YES];
+    [self setProgressLabelHidden:YES];
+    
     [self activateViewsConstraints];
   }
   
   return self;
+}
+
+- (void)awakeFromNib {
+  [super awakeFromNib];
+
 }
 
 - (void)setupBookTitleLabel {
@@ -82,7 +90,7 @@
   self.progressLabel.text = text;
 }
 
-- (void)setProgressBarHidden:(BOOL)hidden {
+- (void)setProgressViewHidden:(BOOL)hidden {
   self.progressView.hidden = hidden;
 }
 

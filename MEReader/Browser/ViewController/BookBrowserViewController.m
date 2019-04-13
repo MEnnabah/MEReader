@@ -28,10 +28,19 @@
 - (void)viewDidLoad {
   [super viewDidLoad];
   self.container = AppDelegate.sharedDelegate.persistentContainer;
+  
+  self.title = @"Library";
   self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addNewURL:)];
   [self.navigationItem.leftBarButtonItem setEnabled:NO];
+  
   [self.tableView registerClass:[BookBrowserTableViewCell class] forCellReuseIdentifier:@"BookCell"];
   [self loadSavedBooks];
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+  [super viewDidAppear:animated];
+  
+  [self.tableView deselectRowAtIndexPath:self.tableView.indexPathForSelectedRow animated:YES];
 }
 
 - (void)loadSavedBooks {
@@ -83,7 +92,7 @@
 
 - (BOOL)isStringAPDFURL:(NSString *)string {
   NSURL *url = [NSURL URLWithString:string];
-  return (url && [url.pathExtension.lowercaseString isEqual: @"pdf"]);
+  return (url && [string.pathExtension.lowercaseString isEqual: @"pdf"]);
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -100,9 +109,16 @@
   
   [cell setBookTitle: book.title];
   [cell setProgressText: [[NSString alloc] initWithFormat:@"%2.0f %%", (book.downloadInfo.progress * 100)]];
-  [cell setProgressBarHidden:NO];
-  [cell setProgressLabelHidden:NO];
-  [cell updateProgressBar:book.downloadInfo.progress];
+  
+  // progress < 0.0 means the server doesn't return Content-Length header for the downloading file.
+  // we may provide a way to indicate a currently downloading task instead of hiding the progress view
+  // this could be a circle that keeps moving like the App Store one.
+  BOOL isNegative = book.downloadInfo.progress < 0.0;
+  [cell setProgressViewHidden:isNegative];
+  [cell setProgressLabelHidden:isNegative];
+  if (!isNegative) {
+    [cell updateProgressBar:book.downloadInfo.progress];
+  }
   
   return cell;
 }
