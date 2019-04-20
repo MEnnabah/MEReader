@@ -22,11 +22,8 @@
   self = [super initWithNibName:nil bundle:nil];
   
   if (self) {
-    NSURL *url = [NSBundle.mainBundle URLForResource:@"AppleDebugging" withExtension:@"pdf"];
     
-    self.title = [url.lastPathComponent stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@".%@", url.pathExtension] withString:@""];
-    
-    self.pdfDocument = [[PDFDocument alloc] initWithURL:url];
+    self.pdfDocument = [[PDFDocument alloc] initWithURL:documentURL];
   }
   
   return self;

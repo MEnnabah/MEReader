@@ -22,7 +22,8 @@ typedef NS_ENUM(int16_t, DownloadState) {
 @interface DownloadInfo : NSManagedObject
 
 @property (nonatomic) DownloadState downloadState;
-+ (NSURL *)offlineLocation;
++ (NSString *)absoluteDownloadsPath;
++ (NSURL *)relativeDocumentDirectory;
 
 @end
 

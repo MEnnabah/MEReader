@@ -124,7 +124,13 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-  
+  Book *selectedBook = [self.fetchedResultsController objectAtIndexPath:indexPath];
+  NSString *downloadPath = selectedBook.downloadInfo.path;
+//  NSURL *absoluteURLPath = [[NSURL alloc] initFileURLWithPath:downloadPath];
+  NSURL *relativePath = [DownloadInfo relativeDocumentDirectory];
+  NSURL *fullPath = [relativePath URLByAppendingPathComponent:downloadPath];
+  [AppDelegate.sharedDelegate saveContext];
+  [self presentDocumentAtURL:fullPath];
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {

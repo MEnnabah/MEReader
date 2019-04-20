@@ -46,9 +46,14 @@
   }
 }
 
-+ (NSURL *)offlineLocation {
-  NSString *docsDir = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES).firstObject;
-  return [[NSURL URLWithString:docsDir] URLByAppendingPathComponent:@".downloads" isDirectory:YES];
++ (NSString *)absoluteDownloadsPath {
+  return [NSString stringWithFormat:@".downloads/"];
+}
+
++ (NSURL *)relativeDocumentDirectory {
+  NSFileManager *manager = NSFileManager.defaultManager;
+  NSURL *docs = [manager URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask].firstObject;
+  return docs;
 }
 
 @end

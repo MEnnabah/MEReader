@@ -115,38 +115,53 @@ totalBytesExpectedToWrite:(int64_t)totalBytesExpectedToWrite {
   [self finish];
 }
 
+///
+/// saved with */.downloads/uuid-string-bla-bla.pdf
+/// to construct a valid url path, use the absolute path + relative path.
+/// that replaces the wildcard with the current platform configs.
+/// example: **absolute path-** /var/device/some-device-uuid/application/some-runtime-related-uuid/dir/documents/
+/// we need to append to the the abosule path, our current saved relative path.
+/// example: /var/device/some-device-uuid/application/some-runtime-related-uuid/dir/documents/.downloads/uuid-string-bla-bla.pdf
+///
+
 - (void)URLSession:(nonnull NSURLSession *)session downloadTask:(nonnull NSURLSessionDownloadTask *)downloadTask didFinishDownloadingToURL:(nonnull NSURL *)location {
   
   NSString *ext = downloadTask.currentRequest.URL.pathExtension;
   if (!ext) {
     ext = @"pdf";
   }
-  NSString *uuidStr = [[NSUUID alloc] init].UUIDString;
-  NSString *fileName = [NSString stringWithFormat:@"%@.%@", uuidStr, ext];
-  NSURL *dir = [DownloadInfo offlineLocation];
-  NSURL *newLocation = [dir URLByAppendingPathComponent:fileName];
-  newLocation = [NSURL fileURLWithPath:newLocation.absoluteString];
   
-  if (![NSFileManager.defaultManager fileExistsAtPath:dir.path]) {
+  NSString *fileName = [NSString stringWithFormat:@"%@.%@", self.book.uniqueID, ext];
+  NSString *privateDownloadsDir = [DownloadInfo absoluteDownloadsPath]; // absolute, not valid dir
+  // we need to convert it to a valid relative dir.
+  NSURL *relativeDownloadsDir = [[DownloadInfo relativeDocumentDirectory] URLByAppendingPathComponent:privateDownloadsDir]; // valid dir
+  
+//  NSURL *newLocation = [dir URLByAppendingPathComponent:fileName];
+//  newLocation = [NSURL fileURLWithPath:newLocation.absoluteString];
+  
+  if (![NSFileManager.defaultManager fileExistsAtPath:relativeDownloadsDir.path]) {
     NSError *directoryCreationError;
-    [NSFileManager.defaultManager createDirectoryAtPath:dir.path withIntermediateDirectories:NO attributes:nil error:&directoryCreationError];
+    [NSFileManager.defaultManager createDirectoryAtPath:relativeDownloadsDir.path withIntermediateDirectories:NO attributes:nil error:&directoryCreationError];
   }
   
+  NSURL *destinationURL = [relativeDownloadsDir URLByAppendingPathComponent:fileName];
   NSError *fileManagerFileMoveError;
-  [NSFileManager.defaultManager moveItemAtURL:location toURL:newLocation error:&fileManagerFileMoveError];
+  [NSFileManager.defaultManager moveItemAtURL:location toURL:destinationURL error:&fileManagerFileMoveError];
   NSError *fileManagerAttributesError;
-  NSDictionary<NSFileAttributeKey, id> *attrs = [NSFileManager.defaultManager attributesOfItemAtPath:newLocation.path error:&fileManagerAttributesError];
+  NSDictionary<NSFileAttributeKey, id> *attrs = [NSFileManager.defaultManager attributesOfItemAtPath:destinationURL.path error:&fileManagerAttributesError];
   
   if (fileManagerFileMoveError || fileManagerAttributesError) {
     NSLog(@"Move file error %@", fileManagerFileMoveError.localizedDescription);
     NSLog(@"Attributes error %@", fileManagerAttributesError.localizedDescription);
   }
   
+  NSString *absoluteFilePath = [privateDownloadsDir stringByAppendingString:fileName];
   __weak DownloadOperation *weakSelf = self;
-  [[self context] performBlockAndWait:^{
+  [[self context] performBlock:^{
     weakSelf.book.downloadInfo.progress = 1.0;
     weakSelf.book.downloadInfo.sizeInBytes = [(NSNumber *)attrs[NSFileSize] intValue];
-    weakSelf.book.downloadInfo.path = newLocation.path;
+    weakSelf.book.downloadInfo.path = absoluteFilePath;
+    NSLog(@"downloadPath: %@", absoluteFilePath);
   }];
 }
 

@@ -29,7 +29,6 @@
 }
 
 - (void)setProgress:(CGFloat)progress {
-  NSLog(@"\np:%f", progress);
   [(PieProgressLayer *)self.layer setProgress:progress];
 }
 
