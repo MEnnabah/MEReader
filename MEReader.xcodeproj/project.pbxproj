@@ -49,7 +49,7 @@
 /* Begin PBXFileReference section */
 		502C22DF2235B09C00003F8A /* BookBrowserTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BookBrowserTableViewCell.h; sourceTree = "<group>"; };
 		502C22E02235B09C00003F8A /* BookBrowserTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BookBrowserTableViewCell.m; sourceTree = "<group>"; };
-		502C22E22235B4CA00003F8A /* DownloadOperation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DownloadOperation.h; sourceTree = "<group>"; };
+		502C22E22235B4CA00003F8A /* DownloadOperation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DownloadOperation.h; sourceTree = "<group>"; wrapsLines = 1; };
 		502C22E32235B4CA00003F8A /* DownloadOperation.m */ = {isa = PBXFileReference; indentWidth = 2; lastKnownFileType = sourcecode.c.objc; path = DownloadOperation.m; sourceTree = "<group>"; tabWidth = 2; usesTabs = 0; wrapsLines = 1; };
 		502C22E82235B8ED00003F8A /* NotificationName.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NotificationName.h; sourceTree = "<group>"; };
 		502C22E92235B8ED00003F8A /* NotificationName.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NotificationName.m; sourceTree = "<group>"; };
@@ -390,6 +390,11 @@
 				TargetAttributes = {
 					50A25774223293530087A888 = {
 						CreatedOnToolsVersion = 10.1;
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 0;
+							};
+						};
 					};
 					50A2578F223293550087A888 = {
 						CreatedOnToolsVersion = 10.1;

@@ -33,6 +33,11 @@
   [self saveContext];
 }
 
+- (void)application:(UIApplication *)application handleEventsForBackgroundURLSession:(NSString *)identifier completionHandler:(void (^)(void))completionHandler {
+  NSLog(@"handleEventsForBackgroundURLSession: %@", identifier);
+  completionHandler();
+}
+
 #pragma mark - Core Data stack
 
 @synthesize persistentContainer = _persistentContainer;

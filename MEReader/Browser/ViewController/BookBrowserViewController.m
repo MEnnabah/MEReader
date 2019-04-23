@@ -129,7 +129,6 @@
 //  NSURL *absoluteURLPath = [[NSURL alloc] initFileURLWithPath:downloadPath];
   NSURL *relativePath = [DownloadInfo relativeDocumentDirectory];
   NSURL *fullPath = [relativePath URLByAppendingPathComponent:downloadPath];
-  [AppDelegate.sharedDelegate saveContext];
   [self presentDocumentAtURL:fullPath];
 }
 
