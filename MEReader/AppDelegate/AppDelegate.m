@@ -16,14 +16,35 @@
 
 @implementation AppDelegate
 
+- (UINavigationController *)setupBooksBrowser {
+  BookBrowserViewController *bookBrowserVC = [[BookBrowserViewController alloc] initWithNibName:nil bundle:nil];
+  bookBrowserVC.title = @"Library";
+  UINavigationController *bookBrowserNVC = [[UINavigationController alloc] initWithRootViewController:bookBrowserVC];
+  return bookBrowserNVC;
+}
+
+- (UINavigationController *)setupSettings {
+  UIViewController *settingsViewController = [[UIViewController alloc] init];
+  settingsViewController.view.backgroundColor = [UIColor whiteColor];
+  settingsViewController.title = @"Settings";
+  UINavigationController *settingsNVC = [[UINavigationController alloc] initWithRootViewController:settingsViewController];
+  return settingsNVC;
+}
+
+- (void)setupKeyWindow {
+  self.window = [[UIWindow alloc] initWithFrame:UIScreen.mainScreen.bounds];
+  UITabBarController *mainTabBar = [[UITabBarController alloc] init];
+  
+  UINavigationController *booksBrowserNVC = [self setupBooksBrowser];
+  UINavigationController *settingsNVC = [self setupSettings];
+  [mainTabBar setViewControllers:@[booksBrowserNVC, settingsNVC]];
+  
+  self.window.rootViewController = mainTabBar;
+  [self.window makeKeyAndVisible];
+}
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-  
-  self.window = [[UIWindow alloc] initWithFrame:UIScreen.mainScreen.bounds];
-  BookBrowserViewController *bookBrowserVC = [[BookBrowserViewController alloc] initWithNibName:nil bundle:nil];
-  self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:bookBrowserVC];
-  [self.window makeKeyAndVisible];
-  
+  [self setupKeyWindow];
   return YES;
 }
 
