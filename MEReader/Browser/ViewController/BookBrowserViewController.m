@@ -108,19 +108,20 @@
   Book *book = [self.fetchedResultsController objectAtIndexPath:indexPath];
   
   [cell setBookTitle: book.title];
-  [cell setProgressText: [[NSString alloc] initWithFormat:@"%2.0f %%", (book.downloadInfo.progress * 100)]];
-  
+  return cell;
+}
+
+- (void)updateProgress:(float)progress ofCell:(BookBrowserTableViewCell *)cell {
+  [cell setProgressText: [[NSString alloc] initWithFormat:@"%2.0f %%", (progress * 100)]];
   // progress < 0.0 means the server doesn't return Content-Length header for the downloading file.
   // we may provide a way to indicate a currently downloading task instead of hiding the progress view
   // this could be a circle that keeps moving like the App Store one.
-  BOOL isNegative = book.downloadInfo.progress < 0.0;
-  [cell setProgressViewHidden:isNegative];
-  [cell setProgressLabelHidden:isNegative];
+  BOOL isNegative = progress < 0.0;
   if (!isNegative) {
-    [cell updateProgressBar:book.downloadInfo.progress];
+    [cell updateProgressBar:progress];
+    [cell setProgressViewHidden:isNegative];
+    [cell setProgressLabelHidden:isNegative];
   }
-  
-  return cell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -148,7 +149,10 @@
       [self.tableView insertRowsAtIndexPaths:@[newIndexPath] withRowAnimation:UITableViewRowAnimationLeft];
       break;
     case NSFetchedResultsChangeUpdate:
-      [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+      if ([self.tableView.indexPathsForVisibleRows containsObject:indexPath]) {
+        BookBrowserTableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
+        [self updateProgress:[self.fetchedResultsController objectAtIndexPath:indexPath].downloadInfo.progress ofCell:cell];
+      }
       break;
     default:
       NSLog(@"NSFetchedResultsChangeType case that we don't yet handle");
