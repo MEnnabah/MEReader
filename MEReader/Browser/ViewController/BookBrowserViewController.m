@@ -29,7 +29,6 @@
   [super viewDidLoad];
   self.container = AppDelegate.sharedDelegate.persistentContainer;
   
-  self.title = @"Library";
   self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addNewURL:)];
   [self.navigationItem.leftBarButtonItem setEnabled:NO];
   

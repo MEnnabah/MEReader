@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1CBDC160228B7E9900CC8179 /* StringParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 1CBDC15F228B7E9900CC8179 /* StringParser.m */; };
 		502C22E12235B09C00003F8A /* BookBrowserTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 502C22E02235B09C00003F8A /* BookBrowserTableViewCell.m */; };
 		502C22E42235B4CA00003F8A /* DownloadOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 502C22E32235B4CA00003F8A /* DownloadOperation.m */; };
 		502C22EA2235B8ED00003F8A /* NotificationName.m in Sources */ = {isa = PBXBuildFile; fileRef = 502C22E92235B8ED00003F8A /* NotificationName.m */; };
@@ -47,6 +48,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		1CBDC15E228B7E9900CC8179 /* StringParser.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StringParser.h; sourceTree = "<group>"; };
+		1CBDC15F228B7E9900CC8179 /* StringParser.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = StringParser.m; sourceTree = "<group>"; };
 		502C22DF2235B09C00003F8A /* BookBrowserTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BookBrowserTableViewCell.h; sourceTree = "<group>"; };
 		502C22E02235B09C00003F8A /* BookBrowserTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BookBrowserTableViewCell.m; sourceTree = "<group>"; };
 		502C22E22235B4CA00003F8A /* DownloadOperation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DownloadOperation.h; sourceTree = "<group>"; wrapsLines = 1; };
@@ -229,6 +232,8 @@
 			children = (
 				508866A12232BE5400E0C8CF /* BookViewController.h */,
 				508866A22232BE5400E0C8CF /* BookViewController.m */,
+				1CBDC15E228B7E9900CC8179 /* StringParser.h */,
+				1CBDC15F228B7E9900CC8179 /* StringParser.m */,
 			);
 			path = Reader;
 			sourceTree = "<group>";
@@ -459,6 +464,7 @@
 			files = (
 				508866A42232C24B00E0C8CF /* BookViewController.m in Sources */,
 				50A257D722329E9F0087A888 /* BookBrowserViewController.m in Sources */,
+				1CBDC160228B7E9900CC8179 /* StringParser.m in Sources */,
 				50A2577A223293530087A888 /* AppDelegate.m in Sources */,
 				50D20ED12234298200FAECF3 /* Operation.m in Sources */,
 				50F3881E2241864F00977CF9 /* Book.m in Sources */,
