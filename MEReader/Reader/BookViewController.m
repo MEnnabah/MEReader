@@ -18,6 +18,8 @@
 
 @implementation BookViewController
 
+// pdfView -> [PDFPage] -> convert point to string at point -> get the statement.
+
 - (instancetype)initWithDocumentAtURL:(NSURL *)documentURL {
   self = [super initWithNibName:nil bundle:nil];
   
@@ -32,11 +34,33 @@
 - (void)viewDidLoad {
   [super viewDidLoad];
   
+  UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(viewTapped:)];
+  [self.view addGestureRecognizer:tapGesture];
+
   self.view.backgroundColor = UIColor.lightGrayColor;
   self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Done" style:UIBarButtonItemStyleDone target:self action:@selector(doneViewingBook)];
   
   [self setupPDFView];
+}
+
+- (void)viewTapped:(UITapGestureRecognizer *)tapGesture {
+  CGPoint location = [tapGesture locationInView:self.pdfView];
+  PDFSelection *selection = [self selectionForStatementAtPoint:location];
+  // what to do with selection?
+}
+
+- (PDFSelection *)selectionForStatementAtPoint:(CGPoint)point {
   
+  PDFPage *containingPage = [self.pdfView pageForPoint:point nearest:NO]; // may return nil
+  PDFPoint pagePoint = [self.pdfView convertPoint:point toPage:containingPage];
+  PDFSelection *wordSelection = [containingPage selectionForWordAtPoint:pagePoint];
+  NSInteger charIndex = [containingPage characterIndexAtPoint:pagePoint];
+  if (charIndex < NSIntegerMax && charIndex >= 0) {
+    unichar currentChar = [containingPage.string characterAtIndex:charIndex];
+    
+  }
+  
+  return nil;
 }
 
 - (void)viewDidAppear:(BOOL)animated {
