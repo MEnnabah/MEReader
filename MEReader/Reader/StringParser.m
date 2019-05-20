@@ -10,29 +10,55 @@
 
 @interface StringParser ()
 
-@property (nonatomic, copy) NSMutableArray<NSString *> *paragraphs;
+@property (nonatomic, copy) NSMutableArray<NSString *> *statements;
 
 @end
 
 @implementation StringParser
 
-/*
- **Notes about the parser.**
- - It might accept NSAttributedString for easier paragraph splitting.
- - NSAttributedString shows the string with their font family.
- - Reading from NSAttributedString paragraphs reads a word with hyphen space when the word is has no enough space to be represented in one line.
-  We might use regex to exclude unwanted characters.
- - We might split our string into paragraphs and add them to array.
- - Each paragraph element should have the start and end index of the paragraph in the entire string.
-*/
-
 - (instancetype)initWithString:(NSString *)string {
   self = [super init];
   if (self) {
     self.string = string;
+    self.statements = [NSMutableArray array];
   }
   return self;
 }
 
+- (void)splitStringIntoStatements {
+  // we may split our string and store it into an array so have direct access in `statementAtIndex:`.
+  
+}
+
+
+/// @param index is the char index in the provided string.
+/// @return NSString of the statement the char index falls in.
+
+- (NSString *)statementAtIndex:(NSUInteger)index {
+  if (index >= self.string.length) {
+    return nil;
+  }
+  
+//  NSUInteger statementStartIndex;
+//  NSUInteger statementEndIndex;
+  
+  NSLinguisticTagger *tagger = [[NSLinguisticTagger alloc] initWithTagSchemes:@[NSLinguisticTagSchemeTokenType] options:0];
+  tagger.string = self.string;
+  NSRange range = NSMakeRange(0, self.string.length);
+  //  NSLinguisticTaggerOptions *options = NSLinguisticTagWhitespace;
+  [tagger enumerateTagsInRange:range unit:NSLinguisticTaggerUnitSentence scheme:NSLinguisticTagSchemeTokenType options:0 usingBlock:^(NSLinguisticTag  _Nullable tag, NSRange tokenRange, BOOL * _Nonnull stop) {
+    NSString *subs = [self.string substringWithRange:tokenRange];
+    if (NSLocationInRange(index, tokenRange)) {
+      NSLog(@"✅ %@", subs);
+    } else {
+      NSLog(@"%@", subs);
+    }
+  }];
+  
+  
+//  [self.string enumerateLinguisticTagsInRange:<#(NSRange)#> scheme:(NSLinguisticTagScheme) options:(NSLinguisticTaggerUnitSentence) orthography:<#(nullable NSOrthography *)#> usingBlock:<#^(NSLinguisticTag  _Nullable tag, NSRange tokenRange, NSRange sentenceRange, BOOL * _Nonnull stop)block#>]
+  
+  return nil;
+}
 
 @end

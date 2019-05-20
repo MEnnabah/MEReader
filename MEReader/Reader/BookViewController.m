@@ -8,11 +8,15 @@
 
 #import "BookViewController.h"
 #import <PDFKit/PDFKit.h>
+#import <AVFoundation/AVFoundation.h>
 
-@interface BookViewController () <PDFViewDelegate, PDFDocumentDelegate>
+@interface BookViewController () <PDFViewDelegate, PDFDocumentDelegate, AVSpeechSynthesizerDelegate>
 
-@property (strong) PDFView *pdfView;
-@property (strong) PDFDocument *pdfDocument;
+@property (strong, nonatomic) PDFView *pdfView;
+@property (strong, nonatomic) PDFDocument *pdfDocument;
+@property (strong, nonatomic) AVSpeechSynthesizer *speechSynthesizer;
+@property (strong, nonatomic) PDFPage *currentPage;
+@property (assign, nonatomic) NSRange currentUtteranceRange;
 
 @end
 
@@ -24,8 +28,15 @@
   self = [super initWithNibName:nil bundle:nil];
   
   if (self) {
-    
     self.pdfDocument = [[PDFDocument alloc] initWithURL:documentURL];
+    
+    NSError *setCategoryError = nil;
+    NSError *setActiveError = nil;
+    [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:&setCategoryError];
+    [[AVAudioSession sharedInstance] setActive:YES error:&setActiveError];
+    
+    self.speechSynthesizer = [[AVSpeechSynthesizer alloc] init];
+    self.speechSynthesizer.delegate = self;
   }
   
   return self;
@@ -51,12 +62,33 @@
 
 - (PDFSelection *)selectionForStatementAtPoint:(CGPoint)point {
   
-  PDFPage *containingPage = [self.pdfView pageForPoint:point nearest:NO]; // may return nil
-  PDFPoint pagePoint = [self.pdfView convertPoint:point toPage:containingPage];
-  PDFSelection *wordSelection = [containingPage selectionForWordAtPoint:pagePoint];
-  NSInteger charIndex = [containingPage characterIndexAtPoint:pagePoint];
+  self.currentPage = [self.pdfView pageForPoint:point nearest:NO]; // may return nil
+  PDFPoint pagePoint = [self.pdfView convertPoint:point toPage:self.currentPage];
+  NSInteger charIndex = [self.currentPage characterIndexAtPoint:pagePoint];
   if (charIndex < NSIntegerMax && charIndex >= 0) {
-    unichar currentChar = [containingPage.string characterAtIndex:charIndex];
+    
+    NSLinguisticTagger *tagger = [[NSLinguisticTagger alloc] initWithTagSchemes:@[NSLinguisticTagSchemeTokenType] options:0];
+    tagger.string = self.currentPage.string;
+    NSRange range = NSMakeRange(0, self.currentPage.string.length);
+    //  NSLinguisticTaggerOptions *options = NSLinguisticTagWhitespace;
+    
+    [tagger enumerateTagsInRange:range unit:NSLinguisticTaggerUnitSentence scheme:NSLinguisticTagSchemeTokenType options:0 usingBlock:^(NSLinguisticTag  _Nullable tag, NSRange tokenRange, BOOL * _Nonnull stop) {
+      if (NSLocationInRange(charIndex, tokenRange)) {
+        
+//        PDFSelection *statementSelection = [self.currentPage selectionForRange:tokenRange];
+//        PDFAnnotation *statementHighlight = [[PDFAnnotation alloc] initWithBounds:[statementSelection boundsForPage:self.currentPage]
+//                                                                          forType:PDFAnnotationSubtypeHighlight withProperties:nil];
+//        statementHighlight.color = [UIColor greenColor];
+//        [self.currentPage addAnnotation:statementHighlight];
+//        [self.currentPage setDisplaysAnnotations:YES];
+        
+        NSString *subs = [self.currentPage.string substringWithRange:tokenRange];
+        self.currentUtteranceRange = tokenRange;
+        AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc] initWithString:subs];
+        utterance.volume = 1.0;
+        [self.speechSynthesizer speakUtterance:utterance];
+      }
+    }];
     
   }
   
@@ -83,6 +115,15 @@
 
 - (void)doneViewingBook {
   [self.navigationController dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (void)speechSynthesizer:(AVSpeechSynthesizer *)synthesizer willSpeakRangeOfSpeechString:(NSRange)characterRange utterance:(AVSpeechUtterance *)utterance {
+  NSRange relativeRange = NSMakeRange(self.currentUtteranceRange.location + characterRange.location, characterRange.length);
+  PDFSelection *wordSelection = [self.currentPage selectionForRange:relativeRange];
+  PDFAnnotation *statementHighlight = [[PDFAnnotation alloc] initWithBounds:[wordSelection boundsForPage:self.currentPage] forType:PDFAnnotationSubtypeHighlight withProperties:nil];
+  statementHighlight.color = [UIColor yellowColor];
+  [self.currentPage setDisplaysAnnotations:YES];
+  [self.currentPage addAnnotation:statementHighlight];
 }
 
 @end
