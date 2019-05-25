@@ -9,12 +9,16 @@
 #import "BookViewController.h"
 #import <PDFKit/PDFKit.h>
 #import <AVFoundation/AVFoundation.h>
+#import "StringParser.h"
 
 @interface BookViewController () <PDFViewDelegate, PDFDocumentDelegate, AVSpeechSynthesizerDelegate>
 
 @property (strong, nonatomic) PDFView *pdfView;
 @property (strong, nonatomic) PDFDocument *pdfDocument;
+
+@property (strong, nonatomic) StringParser *parser;
 @property (strong, nonatomic) AVSpeechSynthesizer *speechSynthesizer;
+
 @property (strong, nonatomic) PDFPage *currentPage;
 @property (assign, nonatomic) NSRange currentUtteranceRange;
 
@@ -22,83 +26,29 @@
 
 @implementation BookViewController
 
-// pdfView -> [PDFPage] -> convert point to string at point -> get the statement.
+#pragma mark - Initializer
 
 - (instancetype)initWithDocumentAtURL:(NSURL *)documentURL {
   self = [super initWithNibName:nil bundle:nil];
   
   if (self) {
     self.pdfDocument = [[PDFDocument alloc] initWithURL:documentURL];
-    
-    NSError *setCategoryError = nil;
-    NSError *setActiveError = nil;
-    [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:&setCategoryError];
-    [[AVAudioSession sharedInstance] setActive:YES error:&setActiveError];
-    
-    self.speechSynthesizer = [[AVSpeechSynthesizer alloc] init];
-    self.speechSynthesizer.delegate = self;
+    [self prepareSpeechSynthesizer];
   }
   
   return self;
 }
 
-- (void)viewDidLoad {
-  [super viewDidLoad];
-  
-  UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(viewTapped:)];
-  [self.view addGestureRecognizer:tapGesture];
+#pragma mark Helpers
 
-  self.view.backgroundColor = UIColor.lightGrayColor;
-  self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Done" style:UIBarButtonItemStyleDone target:self action:@selector(doneViewingBook)];
+- (void)prepareSpeechSynthesizer {
+  NSError *setCategoryError = nil;
+  NSError *setActiveError = nil;
+  [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:&setCategoryError];
+  [[AVAudioSession sharedInstance] setActive:YES error:&setActiveError];
   
-  [self setupPDFView];
-}
-
-- (void)viewTapped:(UITapGestureRecognizer *)tapGesture {
-  CGPoint location = [tapGesture locationInView:self.pdfView];
-  PDFSelection *selection = [self selectionForStatementAtPoint:location];
-  // what to do with selection?
-}
-
-- (PDFSelection *)selectionForStatementAtPoint:(CGPoint)point {
-  
-  self.currentPage = [self.pdfView pageForPoint:point nearest:NO]; // may return nil
-  PDFPoint pagePoint = [self.pdfView convertPoint:point toPage:self.currentPage];
-  NSInteger charIndex = [self.currentPage characterIndexAtPoint:pagePoint];
-  if (charIndex < NSIntegerMax && charIndex >= 0) {
-    
-    NSLinguisticTagger *tagger = [[NSLinguisticTagger alloc] initWithTagSchemes:@[NSLinguisticTagSchemeTokenType] options:0];
-    tagger.string = self.currentPage.string;
-    NSRange range = NSMakeRange(0, self.currentPage.string.length);
-    //  NSLinguisticTaggerOptions *options = NSLinguisticTagWhitespace;
-    
-    [tagger enumerateTagsInRange:range unit:NSLinguisticTaggerUnitSentence scheme:NSLinguisticTagSchemeTokenType options:0 usingBlock:^(NSLinguisticTag  _Nullable tag, NSRange tokenRange, BOOL * _Nonnull stop) {
-      if (NSLocationInRange(charIndex, tokenRange)) {
-        
-//        PDFSelection *statementSelection = [self.currentPage selectionForRange:tokenRange];
-//        PDFAnnotation *statementHighlight = [[PDFAnnotation alloc] initWithBounds:[statementSelection boundsForPage:self.currentPage]
-//                                                                          forType:PDFAnnotationSubtypeHighlight withProperties:nil];
-//        statementHighlight.color = [UIColor greenColor];
-//        [self.currentPage addAnnotation:statementHighlight];
-//        [self.currentPage setDisplaysAnnotations:YES];
-        
-        NSString *subs = [self.currentPage.string substringWithRange:tokenRange];
-        self.currentUtteranceRange = tokenRange;
-        AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc] initWithString:subs];
-        utterance.volume = 1.0;
-        [self.speechSynthesizer speakUtterance:utterance];
-      }
-    }];
-    
-  }
-  
-  return nil;
-}
-
-- (void)viewDidAppear:(BOOL)animated {
-  [super viewDidAppear:animated];
-  
-  self.pdfView.autoScales = YES;
+  self.speechSynthesizer = [[AVSpeechSynthesizer alloc] init];
+  self.speechSynthesizer.delegate = self;
 }
 
 - (void)setupPDFView {
@@ -113,17 +63,87 @@
   [[self.pdfView.bottomAnchor constraintEqualToAnchor:self.view.bottomAnchor] setActive:YES];
 }
 
+#pragma mark - Lifecycle
+
+- (void)viewDidLoad {
+  [super viewDidLoad];
+  
+  UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(viewTapped:)];
+  [self.view addGestureRecognizer:tapGesture];
+
+  self.view.backgroundColor = UIColor.lightGrayColor;
+  self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Done" style:UIBarButtonItemStyleDone target:self action:@selector(doneViewingBook)];
+  
+  [self setupPDFView];
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+  [super viewDidAppear:animated];
+  
+  self.pdfView.autoScales = YES;
+}
+
 - (void)doneViewingBook {
+  [self.speechSynthesizer stopSpeakingAtBoundary:AVSpeechBoundaryImmediate];
   [self.navigationController dismissViewControllerAnimated:YES completion:nil];
 }
 
-- (void)speechSynthesizer:(AVSpeechSynthesizer *)synthesizer willSpeakRangeOfSpeechString:(NSRange)characterRange utterance:(AVSpeechUtterance *)utterance {
-  NSRange relativeRange = NSMakeRange(self.currentUtteranceRange.location + characterRange.location, characterRange.length);
-  PDFSelection *wordSelection = [self.currentPage selectionForRange:relativeRange];
-  PDFAnnotation *statementHighlight = [[PDFAnnotation alloc] initWithBounds:[wordSelection boundsForPage:self.currentPage] forType:PDFAnnotationSubtypeHighlight withProperties:nil];
-  statementHighlight.color = [UIColor yellowColor];
+#pragma mark - Highlighting and Speaking
+
+- (void)viewTapped:(UITapGestureRecognizer *)tapGesture {
+  CGPoint location = [tapGesture locationInView:self.pdfView];
+  
+  PDFPage *tappedPage = [self.pdfView pageForPoint:location nearest:NO]; // may return nil
+  
+  if (!tappedPage) {
+    return;
+  }
+  if (tappedPage != self.currentPage) {
+    self.currentPage = tappedPage;
+    self.parser = [[StringParser alloc] initWithString:tappedPage.string];
+  }
+  
+  NSUInteger charIndex = [self charIndexOfPage:self.currentPage atPoint:location];
+  NSUInteger sentenceIndex = [self.parser indexOfSentenceAtCharIndex:charIndex];
+  
+  NSRange sentenceRange = [self.parser rangeForSentenceAtIndex:sentenceIndex];
+  self.currentUtteranceRange = sentenceRange;
+  
+  NSArray<NSValue *> *ranges = [self.parser wordsRangesInSentenceAtIndex:sentenceIndex];
+  for (NSValue *rangeVal in ranges) {
+    NSRange wordRange = rangeVal.rangeValue;
+    NSRange statementRelativeWordRange = NSMakeRange(wordRange.location + sentenceRange.location, wordRange.length);
+    [self highlightFocusedPageRange:statementRelativeWordRange withColor:[[UIColor magentaColor] colorWithAlphaComponent:0.25] annotationType:(PDFAnnotationSubtypeUnderline)];
+  }
+  
+  NSString *sentence = [self.parser sentenceAtIndex:sentenceIndex];
+  [self speakString:sentence];
+}
+
+- (NSInteger)charIndexOfPage:(PDFPage *)page atPoint:(CGPoint)point {
+  PDFPoint pagePoint = [self.pdfView convertPoint:point toPage:self.currentPage];
+  NSInteger charIndex = [page characterIndexAtPoint:pagePoint];
+  return charIndex;
+}
+
+- (void)speakString:(NSString *)string {
+  AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc] initWithString:[string lowercaseString]];
+  [self.speechSynthesizer speakUtterance:utterance];
+}
+
+- (void)highlightFocusedPageRange:(NSRange)range withColor:(UIColor *)color annotationType:(PDFAnnotationSubtype)type {
+  PDFSelection *wordSelection = [self.currentPage selectionForRange:range];
+  PDFAnnotation *statementHighlight = [[PDFAnnotation alloc] initWithBounds:[wordSelection boundsForPage:self.currentPage] forType:type withProperties:nil];
+  statementHighlight.color = color;
   [self.currentPage setDisplaysAnnotations:YES];
   [self.currentPage addAnnotation:statementHighlight];
+}
+
+#pragma mark - AVSpeechSynthesizerDelegate
+
+- (void)speechSynthesizer:(AVSpeechSynthesizer *)synthesizer willSpeakRangeOfSpeechString:(NSRange)characterRange utterance:(AVSpeechUtterance *)utterance {
+  NSRange relativeRange = NSMakeRange(self.currentUtteranceRange.location + characterRange.location, characterRange.length);
+  [self highlightFocusedPageRange:relativeRange withColor:[UIColor yellowColor] annotationType:PDFAnnotationSubtypeHighlight];
 }
 
 @end

@@ -10,55 +10,86 @@
 
 @interface StringParser ()
 
-@property (nonatomic, copy) NSMutableArray<NSString *> *statements;
+@property (copy, nonatomic) NSArray<NSValue *> *sentencesRanges;
 
 @end
 
 @implementation StringParser
 
-- (instancetype)initWithString:(NSString *)string {
+#pragma mark - Initializer
+
+- (instancetype)initWithString:(NSString *)string {//unit:(TagUnit *)tag {
   self = [super init];
   if (self) {
     self.string = string;
-    self.statements = [NSMutableArray array];
+//    self.unit = tag;
+    
+    self.sentencesRanges = [self sentencesRangesInString];
   }
   return self;
 }
 
-- (void)splitStringIntoStatements {
-  // we may split our string and store it into an array so have direct access in `statementAtIndex:`.
-  
-}
+#pragma mark - Public
 
-
-/// @param index is the char index in the provided string.
-/// @return NSString of the statement the char index falls in.
-
-- (NSString *)statementAtIndex:(NSUInteger)index {
-  if (index >= self.string.length) {
-    return nil;
-  }
+- (NSUInteger)indexOfSentenceAtCharIndex:(NSUInteger)index {
   
-//  NSUInteger statementStartIndex;
-//  NSUInteger statementEndIndex;
-  
-  NSLinguisticTagger *tagger = [[NSLinguisticTagger alloc] initWithTagSchemes:@[NSLinguisticTagSchemeTokenType] options:0];
-  tagger.string = self.string;
-  NSRange range = NSMakeRange(0, self.string.length);
-  //  NSLinguisticTaggerOptions *options = NSLinguisticTagWhitespace;
-  [tagger enumerateTagsInRange:range unit:NSLinguisticTaggerUnitSentence scheme:NSLinguisticTagSchemeTokenType options:0 usingBlock:^(NSLinguisticTag  _Nullable tag, NSRange tokenRange, BOOL * _Nonnull stop) {
-    NSString *subs = [self.string substringWithRange:tokenRange];
-    if (NSLocationInRange(index, tokenRange)) {
-      NSLog(@"✅ %@", subs);
-    } else {
-      NSLog(@"%@", subs);
+  __block NSUInteger fallingIndex;
+  [self.sentencesRanges enumerateObjectsUsingBlock:^(NSValue * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+    NSRange enumeratingRange = obj.rangeValue;
+    if (NSLocationInRange(index, enumeratingRange)) {
+      fallingIndex = idx;
     }
   }];
   
+  return fallingIndex;
+}
+
+- (NSString *)sentenceAtIndex:(NSUInteger)index {
+  NSRange sentenceRange = [self.sentencesRanges objectAtIndex:index].rangeValue;
+  NSString *sentence =  [self.string substringWithRange:sentenceRange];
+  return sentence;
+}
+
+- (NSRange)rangeForSentenceAtIndex:(NSUInteger)index {
+  return [self.sentencesRanges objectAtIndex:index].rangeValue;
+}
+
+#pragma mark - Tokenizing
+
+- (NSArray<NSValue *> *)sentencesRangesInString {
+  NSLinguisticTagger *tagger = [self taggerInString:self.string];
+  NSRange range = NSMakeRange(0, self.string.length);
   
-//  [self.string enumerateLinguisticTagsInRange:<#(NSRange)#> scheme:(NSLinguisticTagScheme) options:(NSLinguisticTaggerUnitSentence) orthography:<#(nullable NSOrthography *)#> usingBlock:<#^(NSLinguisticTag  _Nullable tag, NSRange tokenRange, NSRange sentenceRange, BOOL * _Nonnull stop)block#>]
+  NSMutableArray<NSValue *> *ranges = [NSMutableArray array];
+  [tagger enumerateTagsInRange:range unit:NSLinguisticTaggerUnitSentence scheme:NSLinguisticTagSchemeTokenType options:0 usingBlock:^(NSLinguisticTag  _Nullable tag, NSRange tokenRange, BOOL * _Nonnull stop) {
+    [ranges addObject:[NSValue valueWithRange:tokenRange]];
+  }];
   
-  return nil;
+  return ranges;
+}
+
+- (NSArray<NSValue *> *)wordsRangesInSentenceAtIndex:(NSUInteger)index {
+  NSString *sentence = [self sentenceAtIndex:index];
+  NSLinguisticTagger *tagger = [self taggerInString:sentence];
+  NSRange range = NSMakeRange(0, sentence.length);
+  
+  NSMutableArray<NSValue *> *ranges = [NSMutableArray array];
+  [tagger enumerateTagsInRange:range unit:NSLinguisticTaggerUnitWord scheme:NSLinguisticTagSchemeTokenType options:0 usingBlock:^(NSLinguisticTag  _Nullable tag, NSRange tokenRange, BOOL * _Nonnull stop) {
+    [ranges addObject:[NSValue valueWithRange:tokenRange]];
+  }];
+  
+  return ranges;
+}
+
+- (NSLinguisticTagger *)taggerInString:(NSString *)processingString {
+  
+  NSArray<NSLinguisticTagScheme> *tags = @[NSLinguisticTagSchemeTokenType];
+  NSLinguisticTaggerOptions options = NSLinguisticTaggerOmitWhitespace | NSLinguisticTaggerJoinNames | NSLinguisticTaggerOmitOther;
+  
+  NSLinguisticTagger *tagger = [[NSLinguisticTagger alloc] initWithTagSchemes:tags options:options];
+  tagger.string = processingString;
+  
+  return tagger;
 }
 
 @end
