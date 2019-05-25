@@ -77,10 +77,16 @@
 
   self.view.backgroundColor = UIColor.lightGrayColor;
   self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Done" style:UIBarButtonItemStyleDone target:self action:@selector(doneViewingBook)];
-  self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"Stop"] style:(UIBarButtonItemStyleDone) target:self action:@selector(stopSpeaking)];
-  
   
   [self setupPDFView];
+}
+
+- (void)showsStopButton:(BOOL)flag {
+  if (flag == YES) {
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"Stop"] style:(UIBarButtonItemStyleDone) target:self action:@selector(stopSpeaking)];
+  } else {
+    self.navigationItem.rightBarButtonItem = nil;
+  }
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -158,11 +164,13 @@
 - (void)speakString:(NSString *)string {
   AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc] initWithString:[string lowercaseString]];
   [self.speechSynthesizer speakUtterance:utterance];
+  [self showsStopButton:YES];
 }
 
 - (void)stopSpeaking {
   [self.speechSynthesizer stopSpeakingAtBoundary:AVSpeechBoundaryImmediate];
   [self.annotationManager removeAllAnnotationsAtPage:self.currentPage];
+  [self showsStopButton:NO];
 }
 
 #pragma mark - AVSpeechSynthesizerDelegate
