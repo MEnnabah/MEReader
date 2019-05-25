@@ -10,17 +10,20 @@
 #import <PDFKit/PDFKit.h>
 #import <AVFoundation/AVFoundation.h>
 #import "StringParser.h"
+#import "PDFAnnotationManager.h"
 
 @interface BookViewController () <PDFViewDelegate, PDFDocumentDelegate, AVSpeechSynthesizerDelegate>
 
 @property (strong, nonatomic) PDFView *pdfView;
 @property (strong, nonatomic) PDFDocument *pdfDocument;
 
-@property (strong, nonatomic) StringParser *parser;
 @property (strong, nonatomic) AVSpeechSynthesizer *speechSynthesizer;
+@property (strong, nonatomic) StringParser *parser;
+@property (strong, nonatomic) PDFAnnotationManager *annotationManager;
 
 @property (strong, nonatomic) PDFPage *currentPage;
 @property (assign, nonatomic) NSRange currentUtteranceRange;
+@property (assign, nonatomic) NSUInteger currentSentenceIndex;
 
 @end
 
@@ -33,6 +36,7 @@
   
   if (self) {
     self.pdfDocument = [[PDFDocument alloc] initWithURL:documentURL];
+    self.annotationManager = [[PDFAnnotationManager alloc] init];
     [self prepareSpeechSynthesizer];
   }
   
@@ -120,15 +124,25 @@
     return;
   }
   
-  NSUInteger sentenceIndex = [self.parser indexOfSentenceAtCharIndex:charIndex];
+  self.currentSentenceIndex = [self.parser indexOfSentenceAtCharIndex:charIndex];
+  [self updateUtteranceAtCurrentSentenceIndex];
+}
+
+- (void)updateUtteranceAtCurrentSentenceIndex {
+  NSRange sentenceRange = [self.parser rangeForSentenceAtIndex:self.currentSentenceIndex];
   
-  NSRange sentenceRange = [self.parser rangeForSentenceAtIndex:sentenceIndex];
+  if (sentenceRange.location == NSNotFound) {
+    // Next sentence is out of page's range. We may go to next page and start reading.
+    return;
+  }
+  
   self.currentUtteranceRange = sentenceRange;
   
-  NSArray<NSValue *> *ranges = [self.parser wordsRangesInSentenceAtIndex:sentenceIndex withOffset:sentenceRange.location];
-  [self highlightRanges:ranges ofFocusedPageWithColor:[[UIColor magentaColor] colorWithAlphaComponent:0.25] annotationType:(PDFAnnotationSubtypeUnderline)];
+  NSArray<NSValue *> *ranges = [self.parser wordsRangesInSentenceAtIndex:self.currentSentenceIndex withOffset:sentenceRange.location];
+  [self.annotationManager removeRecentlyAddedSentenceAnnotationToPage:self.currentPage];
+  [self.annotationManager addSentenceAnnotationToPage:self.currentPage withRangeValues:ranges];
   
-  NSString *sentence = [self.parser sentenceAtIndex:sentenceIndex];
+  NSString *sentence = [self.parser sentenceAtIndex:self.currentSentenceIndex];
   [self speakString:sentence];
 }
 
@@ -143,21 +157,19 @@
   [self.speechSynthesizer speakUtterance:utterance];
 }
 
-- (void)highlightRanges:(NSArray<NSValue *> *)ranges ofFocusedPageWithColor:(UIColor *)color annotationType:(PDFAnnotationSubtype)type {
-  for (NSValue *range in ranges) {
-    PDFSelection *selection = [self.currentPage selectionForRange:range.rangeValue];
-    PDFAnnotation *highlight = [[PDFAnnotation alloc] initWithBounds:[selection boundsForPage:self.currentPage] forType:type withProperties:nil];
-    highlight.color = color;
-    [self.currentPage setDisplaysAnnotations:YES];
-    [self.currentPage addAnnotation:highlight];
-  }
-}
-
 #pragma mark - AVSpeechSynthesizerDelegate
 
 - (void)speechSynthesizer:(AVSpeechSynthesizer *)synthesizer willSpeakRangeOfSpeechString:(NSRange)characterRange utterance:(AVSpeechUtterance *)utterance {
   NSRange relativeRange = NSMakeRange(self.currentUtteranceRange.location + characterRange.location, characterRange.length);
-  [self highlightRanges:@[[NSValue valueWithRange:relativeRange]] ofFocusedPageWithColor:[UIColor yellowColor] annotationType:PDFAnnotationSubtypeHighlight];
+  [self.annotationManager removeRecentlyAddedWordAnnotationToPage:self.currentPage];
+  [self.annotationManager addWordAnnotationToPage:self.currentPage withRange:relativeRange];
+}
+
+- (void)speechSynthesizer:(AVSpeechSynthesizer *)synthesizer didFinishSpeechUtterance:(AVSpeechUtterance *)utterance {
+  self.currentSentenceIndex++;
+  [self.annotationManager removeRecentlyAddedSentenceAnnotationToPage:self.currentPage];
+  [self.annotationManager removeRecentlyAddedWordAnnotationToPage:self.currentPage];
+  [self updateUtteranceAtCurrentSentenceIndex];
 }
 
 @end

@@ -11,6 +11,7 @@
 		502C22E12235B09C00003F8A /* BookBrowserTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 502C22E02235B09C00003F8A /* BookBrowserTableViewCell.m */; };
 		502C22E42235B4CA00003F8A /* DownloadOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 502C22E32235B4CA00003F8A /* DownloadOperation.m */; };
 		502C22EA2235B8ED00003F8A /* NotificationName.m in Sources */ = {isa = PBXBuildFile; fileRef = 502C22E92235B8ED00003F8A /* NotificationName.m */; };
+		5067E86A2299D73700C47421 /* PDFAnnotationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 5067E8692299D73700C47421 /* PDFAnnotationManager.m */; };
 		508866A42232C24B00E0C8CF /* BookViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 508866A22232BE5400E0C8CF /* BookViewController.m */; };
 		50A2577A223293530087A888 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 50A25779223293530087A888 /* AppDelegate.m */; };
 		50A25783223293530087A888 /* MEReader.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 50A25781223293530087A888 /* MEReader.xcdatamodeld */; };
@@ -56,6 +57,8 @@
 		502C22E32235B4CA00003F8A /* DownloadOperation.m */ = {isa = PBXFileReference; indentWidth = 2; lastKnownFileType = sourcecode.c.objc; path = DownloadOperation.m; sourceTree = "<group>"; tabWidth = 2; usesTabs = 0; wrapsLines = 1; };
 		502C22E82235B8ED00003F8A /* NotificationName.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NotificationName.h; sourceTree = "<group>"; };
 		502C22E92235B8ED00003F8A /* NotificationName.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NotificationName.m; sourceTree = "<group>"; };
+		5067E8682299D73700C47421 /* PDFAnnotationManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PDFAnnotationManager.h; sourceTree = "<group>"; };
+		5067E8692299D73700C47421 /* PDFAnnotationManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PDFAnnotationManager.m; sourceTree = "<group>"; };
 		508866A12232BE5400E0C8CF /* BookViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BookViewController.h; sourceTree = "<group>"; };
 		508866A22232BE5400E0C8CF /* BookViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BookViewController.m; sourceTree = "<group>"; };
 		50A25775223293530087A888 /* MEReader.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MEReader.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -234,6 +237,8 @@
 				508866A22232BE5400E0C8CF /* BookViewController.m */,
 				1CBDC15E228B7E9900CC8179 /* StringParser.h */,
 				1CBDC15F228B7E9900CC8179 /* StringParser.m */,
+				5067E8682299D73700C47421 /* PDFAnnotationManager.h */,
+				5067E8692299D73700C47421 /* PDFAnnotationManager.m */,
 			);
 			path = Reader;
 			sourceTree = "<group>";
@@ -467,6 +472,7 @@
 				1CBDC160228B7E9900CC8179 /* StringParser.m in Sources */,
 				50A2577A223293530087A888 /* AppDelegate.m in Sources */,
 				50D20ED12234298200FAECF3 /* Operation.m in Sources */,
+				5067E86A2299D73700C47421 /* PDFAnnotationManager.m in Sources */,
 				50F3881E2241864F00977CF9 /* Book.m in Sources */,
 				50F388242241870D00977CF9 /* Note.m in Sources */,
 				502C22E12235B09C00003F8A /* BookBrowserTableViewCell.m in Sources */,

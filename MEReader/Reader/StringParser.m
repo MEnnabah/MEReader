@@ -51,7 +51,11 @@
 }
 
 - (NSRange)rangeForSentenceAtIndex:(NSUInteger)index {
-  return [self.sentencesRanges objectAtIndex:index].rangeValue;
+  if (index < self.sentencesRanges.count) {
+    return [self.sentencesRanges objectAtIndex:index].rangeValue;
+  } else {
+    return NSMakeRange(NSNotFound, 0);
+  }
 }
 
 #pragma mark - Tokenizing
