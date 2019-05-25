@@ -68,14 +68,24 @@
   return ranges;
 }
 
-- (NSArray<NSValue *> *)wordsRangesInSentenceAtIndex:(NSUInteger)index {
+/**
+ The word tokens related to a single sentence of a string.
+ 
+ @param index The sentence index of the entire string.
+ Can be obtained from `indexOfSentenceAtCharIndex:`.
+ @param offset Used to offset the range of every word.
+ 
+ @return NSRange of every word casted to NSValue object.
+*/
+
+- (NSArray<NSValue *> *)wordsRangesInSentenceAtIndex:(NSUInteger)index withOffset:(NSUInteger)offset {
   NSString *sentence = [self sentenceAtIndex:index];
   NSLinguisticTagger *tagger = [self taggerInString:sentence];
   NSRange range = NSMakeRange(0, sentence.length);
   
   NSMutableArray<NSValue *> *ranges = [NSMutableArray array];
   [tagger enumerateTagsInRange:range unit:NSLinguisticTaggerUnitWord scheme:NSLinguisticTagSchemeTokenType options:0 usingBlock:^(NSLinguisticTag  _Nullable tag, NSRange tokenRange, BOOL * _Nonnull stop) {
-    [ranges addObject:[NSValue valueWithRange:tokenRange]];
+    [ranges addObject:[NSValue valueWithRange:NSMakeRange(tokenRange.location + offset, tokenRange.length)]];
   }];
   
   return ranges;

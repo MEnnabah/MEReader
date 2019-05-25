@@ -91,6 +91,16 @@
 #pragma mark - Highlighting and Speaking
 
 - (void)viewTapped:(UITapGestureRecognizer *)tapGesture {
+  if (self.speechSynthesizer.isSpeaking) {
+    if (self.speechSynthesizer.isPaused) {
+      [self.speechSynthesizer continueSpeaking];
+    } else {
+      [self.speechSynthesizer pauseSpeakingAtBoundary:(AVSpeechBoundaryImmediate)];
+    }
+    return;
+  }
+  
+  
   CGPoint location = [tapGesture locationInView:self.pdfView];
   
   PDFPage *tappedPage = [self.pdfView pageForPoint:location nearest:NO]; // may return nil
@@ -104,17 +114,19 @@
   }
   
   NSUInteger charIndex = [self charIndexOfPage:self.currentPage atPoint:location];
+  
+  if (charIndex >= tappedPage.string.length) {
+    // we should have the charindex inside the string length.
+    return;
+  }
+  
   NSUInteger sentenceIndex = [self.parser indexOfSentenceAtCharIndex:charIndex];
   
   NSRange sentenceRange = [self.parser rangeForSentenceAtIndex:sentenceIndex];
   self.currentUtteranceRange = sentenceRange;
   
-  NSArray<NSValue *> *ranges = [self.parser wordsRangesInSentenceAtIndex:sentenceIndex];
-  for (NSValue *rangeVal in ranges) {
-    NSRange wordRange = rangeVal.rangeValue;
-    NSRange statementRelativeWordRange = NSMakeRange(wordRange.location + sentenceRange.location, wordRange.length);
-    [self highlightFocusedPageRange:statementRelativeWordRange withColor:[[UIColor magentaColor] colorWithAlphaComponent:0.25] annotationType:(PDFAnnotationSubtypeUnderline)];
-  }
+  NSArray<NSValue *> *ranges = [self.parser wordsRangesInSentenceAtIndex:sentenceIndex withOffset:sentenceRange.location];
+  [self highlightRanges:ranges ofFocusedPageWithColor:[[UIColor magentaColor] colorWithAlphaComponent:0.25] annotationType:(PDFAnnotationSubtypeUnderline)];
   
   NSString *sentence = [self.parser sentenceAtIndex:sentenceIndex];
   [self speakString:sentence];
@@ -131,19 +143,21 @@
   [self.speechSynthesizer speakUtterance:utterance];
 }
 
-- (void)highlightFocusedPageRange:(NSRange)range withColor:(UIColor *)color annotationType:(PDFAnnotationSubtype)type {
-  PDFSelection *wordSelection = [self.currentPage selectionForRange:range];
-  PDFAnnotation *statementHighlight = [[PDFAnnotation alloc] initWithBounds:[wordSelection boundsForPage:self.currentPage] forType:type withProperties:nil];
-  statementHighlight.color = color;
-  [self.currentPage setDisplaysAnnotations:YES];
-  [self.currentPage addAnnotation:statementHighlight];
+- (void)highlightRanges:(NSArray<NSValue *> *)ranges ofFocusedPageWithColor:(UIColor *)color annotationType:(PDFAnnotationSubtype)type {
+  for (NSValue *range in ranges) {
+    PDFSelection *selection = [self.currentPage selectionForRange:range.rangeValue];
+    PDFAnnotation *highlight = [[PDFAnnotation alloc] initWithBounds:[selection boundsForPage:self.currentPage] forType:type withProperties:nil];
+    highlight.color = color;
+    [self.currentPage setDisplaysAnnotations:YES];
+    [self.currentPage addAnnotation:highlight];
+  }
 }
 
 #pragma mark - AVSpeechSynthesizerDelegate
 
 - (void)speechSynthesizer:(AVSpeechSynthesizer *)synthesizer willSpeakRangeOfSpeechString:(NSRange)characterRange utterance:(AVSpeechUtterance *)utterance {
   NSRange relativeRange = NSMakeRange(self.currentUtteranceRange.location + characterRange.location, characterRange.length);
-  [self highlightFocusedPageRange:relativeRange withColor:[UIColor yellowColor] annotationType:PDFAnnotationSubtypeHighlight];
+  [self highlightRanges:@[[NSValue valueWithRange:relativeRange]] ofFocusedPageWithColor:[UIColor yellowColor] annotationType:PDFAnnotationSubtypeHighlight];
 }
 
 @end

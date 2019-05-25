@@ -26,7 +26,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSUInteger)indexOfSentenceAtCharIndex:(NSUInteger)index;
 - (NSString *)sentenceAtIndex:(NSUInteger)index;
 - (NSRange)rangeForSentenceAtIndex:(NSUInteger)index;
-- (NSArray<NSValue *> *)wordsRangesInSentenceAtIndex:(NSUInteger)index;
+- (NSArray<NSValue *> *)wordsRangesInSentenceAtIndex:(NSUInteger)index withOffset:(NSUInteger)offset;
 
 @end
 
