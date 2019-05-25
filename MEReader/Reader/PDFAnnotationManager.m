@@ -52,9 +52,18 @@
 }
 
 - (void)removeAllAnnotationsAtPage:(PDFPage *)page {
-  for (PDFAnnotation *annotation in page.annotations) {
-    [page removeAnnotation:annotation];
+  for (NSArray<PDFAnnotation *> *sentence in self.sentencesWords) {
+    for (PDFAnnotation *word in sentence) {
+      [page removeAnnotation:word];
+    }
   }
+  
+  for (PDFAnnotation *word in self.words) {
+    [page removeAnnotation:word];
+  }
+  
+  [self.sentencesWords removeAllObjects];
+  [self.words removeAllObjects];
 }
 
 #pragma mark - Private

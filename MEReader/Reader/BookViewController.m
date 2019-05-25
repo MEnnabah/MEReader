@@ -77,6 +77,8 @@
 
   self.view.backgroundColor = UIColor.lightGrayColor;
   self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Done" style:UIBarButtonItemStyleDone target:self action:@selector(doneViewingBook)];
+  self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"Stop"] style:(UIBarButtonItemStyleDone) target:self action:@selector(stopSpeaking)];
+  
   
   [self setupPDFView];
 }
@@ -92,7 +94,7 @@
   [self.navigationController dismissViewControllerAnimated:YES completion:nil];
 }
 
-#pragma mark - Highlighting and Speaking
+#pragma mark - Highlighting
 
 - (void)viewTapped:(UITapGestureRecognizer *)tapGesture {
   if (self.speechSynthesizer.isSpeaking) {
@@ -103,7 +105,6 @@
     }
     return;
   }
-  
   
   CGPoint location = [tapGesture locationInView:self.pdfView];
   
@@ -152,9 +153,16 @@
   return charIndex;
 }
 
+#pragma mark - Playback
+
 - (void)speakString:(NSString *)string {
   AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc] initWithString:[string lowercaseString]];
   [self.speechSynthesizer speakUtterance:utterance];
+}
+
+- (void)stopSpeaking {
+  [self.speechSynthesizer stopSpeakingAtBoundary:AVSpeechBoundaryImmediate];
+  [self.annotationManager removeAllAnnotationsAtPage:self.currentPage];
 }
 
 #pragma mark - AVSpeechSynthesizerDelegate
