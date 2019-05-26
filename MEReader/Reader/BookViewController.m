@@ -76,6 +76,8 @@
   [self.view addGestureRecognizer:tapGesture];
 
   self.view.backgroundColor = UIColor.lightGrayColor;
+  self.title = self.pdfDocument.documentAttributes[PDFDocumentTitleAttribute];
+  
   self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Done" style:UIBarButtonItemStyleDone target:self action:@selector(doneViewingBook)];
   
   [self setupPDFView];
