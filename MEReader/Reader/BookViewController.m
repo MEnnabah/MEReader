@@ -93,6 +93,9 @@
   [super viewDidAppear:animated];
   
   self.pdfView.autoScales = YES;
+  
+  self.navigationController.hidesBarsOnSwipe = YES;
+  self.navigationController.hidesBarsOnTap = YES;
 }
 
 - (void)doneViewingBook {
@@ -108,6 +111,7 @@
       [self.speechSynthesizer continueSpeaking];
     } else {
       [self.speechSynthesizer pauseSpeakingAtBoundary:(AVSpeechBoundaryImmediate)];
+      [self.navigationController setNavigationBarHidden:NO];
     }
     return;
   }
