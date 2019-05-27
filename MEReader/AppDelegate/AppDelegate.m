@@ -9,6 +9,8 @@
 #import "AppDelegate.h"
 #import "BookBrowserViewController.h"
 #import "MEReader+CoreDataModel.h"
+#import "ReaderDefaults.h"
+#import "PreferencesTableViewController.h"
 
 @interface AppDelegate ()
 
@@ -24,10 +26,10 @@
 }
 
 - (UINavigationController *)setupSettings {
-  UIViewController *settingsViewController = [[UIViewController alloc] init];
-  settingsViewController.view.backgroundColor = [UIColor whiteColor];
-  settingsViewController.title = @"Settings";
-  UINavigationController *settingsNVC = [[UINavigationController alloc] initWithRootViewController:settingsViewController];
+  UIStoryboard *preferencesStoryboard = [UIStoryboard storyboardWithName:@"PreferencesStoryboard" bundle:nil];
+  PreferencesTableViewController *preferencesTableViewController = [preferencesStoryboard instantiateViewControllerWithIdentifier:@"PreferencesTableViewController"];
+  preferencesTableViewController.title = @"Preferences";
+  UINavigationController *settingsNVC = [[UINavigationController alloc] initWithRootViewController:preferencesTableViewController];
   return settingsNVC;
 }
 
@@ -44,6 +46,7 @@
 }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+  [ReaderDefaults syncAvailableHighlightColors];
   [self setupKeyWindow];
   return YES;
 }

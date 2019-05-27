@@ -10,10 +10,10 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-//typedef NS_ENUM(NSUInteger, TagUnit) {
-//  TagUnitSentence,
-//  TagUnitWord
-//};
+typedef NS_ENUM(NSUInteger, TagUnit) {
+  TagUnitSentence,
+  TagUnitWord
+};
 
 @interface StringParser : NSObject
 

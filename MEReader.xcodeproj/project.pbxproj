@@ -12,6 +12,12 @@
 		502C22E42235B4CA00003F8A /* DownloadOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 502C22E32235B4CA00003F8A /* DownloadOperation.m */; };
 		502C22EA2235B8ED00003F8A /* NotificationName.m in Sources */ = {isa = PBXBuildFile; fileRef = 502C22E92235B8ED00003F8A /* NotificationName.m */; };
 		5067E86A2299D73700C47421 /* PDFAnnotationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 5067E8692299D73700C47421 /* PDFAnnotationManager.m */; };
+		5067E874229B1F7D00C47421 /* PreferencesTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5067E872229B1F7D00C47421 /* PreferencesTableViewController.m */; };
+		5067E877229B2ACC00C47421 /* PreferencesStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5067E876229B2ACC00C47421 /* PreferencesStoryboard.storyboard */; };
+		5067E87D229B3C1800C47421 /* ColorPreferenceTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5067E87C229B3C1800C47421 /* ColorPreferenceTableViewController.m */; };
+		5067E883229B3CF500C47421 /* ColorPreferencesTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5067E882229B3CF500C47421 /* ColorPreferencesTableViewCell.m */; };
+		5067E887229B3FFF00C47421 /* ReaderDefaults.m in Sources */ = {isa = PBXBuildFile; fileRef = 5067E886229B3FFF00C47421 /* ReaderDefaults.m */; };
+		5067E88E229B763F00C47421 /* HighlightColor.m in Sources */ = {isa = PBXBuildFile; fileRef = 5067E88D229B763F00C47421 /* HighlightColor.m */; };
 		508866A42232C24B00E0C8CF /* BookViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 508866A22232BE5400E0C8CF /* BookViewController.m */; };
 		50A2577A223293530087A888 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 50A25779223293530087A888 /* AppDelegate.m */; };
 		50A25783223293530087A888 /* MEReader.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 50A25781223293530087A888 /* MEReader.xcdatamodeld */; };
@@ -59,6 +65,17 @@
 		502C22E92235B8ED00003F8A /* NotificationName.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NotificationName.m; sourceTree = "<group>"; };
 		5067E8682299D73700C47421 /* PDFAnnotationManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PDFAnnotationManager.h; sourceTree = "<group>"; };
 		5067E8692299D73700C47421 /* PDFAnnotationManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PDFAnnotationManager.m; sourceTree = "<group>"; };
+		5067E871229B1F7D00C47421 /* PreferencesTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PreferencesTableViewController.h; sourceTree = "<group>"; };
+		5067E872229B1F7D00C47421 /* PreferencesTableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PreferencesTableViewController.m; sourceTree = "<group>"; };
+		5067E876229B2ACC00C47421 /* PreferencesStoryboard.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = PreferencesStoryboard.storyboard; sourceTree = "<group>"; };
+		5067E87B229B3C1800C47421 /* ColorPreferenceTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ColorPreferenceTableViewController.h; sourceTree = "<group>"; };
+		5067E87C229B3C1800C47421 /* ColorPreferenceTableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ColorPreferenceTableViewController.m; sourceTree = "<group>"; };
+		5067E881229B3CF500C47421 /* ColorPreferencesTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ColorPreferencesTableViewCell.h; sourceTree = "<group>"; };
+		5067E882229B3CF500C47421 /* ColorPreferencesTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ColorPreferencesTableViewCell.m; sourceTree = "<group>"; };
+		5067E885229B3FFF00C47421 /* ReaderDefaults.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ReaderDefaults.h; sourceTree = "<group>"; };
+		5067E886229B3FFF00C47421 /* ReaderDefaults.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ReaderDefaults.m; sourceTree = "<group>"; };
+		5067E88C229B763F00C47421 /* HighlightColor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HighlightColor.h; sourceTree = "<group>"; };
+		5067E88D229B763F00C47421 /* HighlightColor.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HighlightColor.m; sourceTree = "<group>"; };
 		508866A12232BE5400E0C8CF /* BookViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BookViewController.h; sourceTree = "<group>"; };
 		508866A22232BE5400E0C8CF /* BookViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BookViewController.m; sourceTree = "<group>"; };
 		50A25775223293530087A888 /* MEReader.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MEReader.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -194,6 +211,72 @@
 			path = Note;
 			sourceTree = "<group>";
 		};
+		5067E870229B1DE300C47421 /* Preferences */ = {
+			isa = PBXGroup;
+			children = (
+				5067E884229B3FE200C47421 /* Model */,
+				5067E879229B3BE200C47421 /* ColorPreferences */,
+				5067E878229B3BD300C47421 /* PreferencesViewController */,
+				5067E876229B2ACC00C47421 /* PreferencesStoryboard.storyboard */,
+			);
+			path = Preferences;
+			sourceTree = "<group>";
+		};
+		5067E878229B3BD300C47421 /* PreferencesViewController */ = {
+			isa = PBXGroup;
+			children = (
+				5067E871229B1F7D00C47421 /* PreferencesTableViewController.h */,
+				5067E872229B1F7D00C47421 /* PreferencesTableViewController.m */,
+			);
+			path = PreferencesViewController;
+			sourceTree = "<group>";
+		};
+		5067E879229B3BE200C47421 /* ColorPreferences */ = {
+			isa = PBXGroup;
+			children = (
+				5067E88B229B763200C47421 /* Model */,
+				5067E87F229B3CD300C47421 /* View */,
+				5067E87E229B3CC300C47421 /* ViewController */,
+			);
+			path = ColorPreferences;
+			sourceTree = "<group>";
+		};
+		5067E87E229B3CC300C47421 /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				5067E87B229B3C1800C47421 /* ColorPreferenceTableViewController.h */,
+				5067E87C229B3C1800C47421 /* ColorPreferenceTableViewController.m */,
+			);
+			path = ViewController;
+			sourceTree = "<group>";
+		};
+		5067E87F229B3CD300C47421 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				5067E881229B3CF500C47421 /* ColorPreferencesTableViewCell.h */,
+				5067E882229B3CF500C47421 /* ColorPreferencesTableViewCell.m */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		5067E884229B3FE200C47421 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				5067E885229B3FFF00C47421 /* ReaderDefaults.h */,
+				5067E886229B3FFF00C47421 /* ReaderDefaults.m */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		5067E88B229B763200C47421 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				5067E88C229B763F00C47421 /* HighlightColor.h */,
+				5067E88D229B763F00C47421 /* HighlightColor.m */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
 		5088669C2232BDB200E0C8CF /* Browser */ = {
 			isa = PBXGroup;
 			children = (
@@ -266,6 +349,7 @@
 		50A25777223293530087A888 /* MEReader */ = {
 			isa = PBXGroup;
 			children = (
+				5067E870229B1DE300C47421 /* Preferences */,
 				5021495E2259094400D89FD4 /* View */,
 				50F387E12241405C00977CF9 /* PersistenceManager */,
 				504095B52237335C00BAB618 /* Model */,
@@ -442,6 +526,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				50A25788223293550087A888 /* LaunchScreen.storyboard in Resources */,
+				5067E877229B2ACC00C47421 /* PreferencesStoryboard.storyboard in Resources */,
 				50A25785223293550087A888 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -467,7 +552,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5067E87D229B3C1800C47421 /* ColorPreferenceTableViewController.m in Sources */,
+				5067E883229B3CF500C47421 /* ColorPreferencesTableViewCell.m in Sources */,
+				5067E887229B3FFF00C47421 /* ReaderDefaults.m in Sources */,
 				508866A42232C24B00E0C8CF /* BookViewController.m in Sources */,
+				5067E88E229B763F00C47421 /* HighlightColor.m in Sources */,
 				50A257D722329E9F0087A888 /* BookBrowserViewController.m in Sources */,
 				1CBDC160228B7E9900CC8179 /* StringParser.m in Sources */,
 				50A2577A223293530087A888 /* AppDelegate.m in Sources */,
@@ -480,6 +569,7 @@
 				50A2578B223293550087A888 /* main.m in Sources */,
 				50F387CE2241283600977CF9 /* DownloadController.m in Sources */,
 				502C22EA2235B8ED00003F8A /* NotificationName.m in Sources */,
+				5067E874229B1F7D00C47421 /* PreferencesTableViewController.m in Sources */,
 				50A25783223293530087A888 /* MEReader.xcdatamodeld in Sources */,
 				502C22E42235B4CA00003F8A /* DownloadOperation.m in Sources */,
 				50CB6E51225924E40069FD34 /* PieProgressLayer.m in Sources */,

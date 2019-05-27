@@ -23,7 +23,6 @@
   if (self) {
     self.string = string;
 //    self.unit = tag;
-    
     self.sentencesRanges = [self sentencesRangesInString];
   }
   return self;

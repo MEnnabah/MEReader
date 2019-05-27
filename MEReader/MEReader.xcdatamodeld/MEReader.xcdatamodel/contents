@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="14460.32" systemVersion="18D109" minimumToolsVersion="Automatic" sourceLanguage="Objective-C" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="14490.99" systemVersion="18E226" minimumToolsVersion="Automatic" sourceLanguage="Objective-C" userDefinedModelVersionIdentifier="">
     <entity name="Book" representedClassName="Book" syncable="YES" codeGenerationType="category">
         <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="uniqueID" optional="YES" attributeType="String" syncable="YES"/>
@@ -20,8 +20,8 @@
         <relationship name="book" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Book" inverseName="notes" inverseEntity="Book" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Book" positionX="-36" positionY="9" width="128" height="120"/>
-        <element name="DownloadInfo" positionX="0" positionY="72" width="128" height="135"/>
-        <element name="Note" positionX="27" positionY="126" width="128" height="75"/>
+        <element name="Book" positionX="-92.77734375" positionY="338.765625" width="128" height="120"/>
+        <element name="DownloadInfo" positionX="-64.0625" positionY="69.63671875" width="128" height="135"/>
+        <element name="Note" positionX="188.08984375" positionY="256.34375" width="128" height="75"/>
     </elements>
 </model>
