@@ -7,12 +7,18 @@
 //
 
 #import "PDFAnnotationManager.h"
+#import "ReaderDefaults.h"
 
 @interface PDFAnnotationManager ()
 
 @property (strong, nonatomic) NSMutableArray<PDFAnnotation *> *words;
 @property (strong, nonatomic) NSMutableArray<NSArray <PDFAnnotation *> *> *sentencesWords;
 
+@property (assign, nonatomic) PDFAnnotationSubtype wordAnnotationType;
+@property (assign, nonatomic) PDFAnnotationSubtype sentenceAnnotationType;
+
+@property (strong, nonatomic) UIColor *wordColor;
+@property (strong, nonatomic) UIColor *sentenceColor;
 @end
 
 @implementation PDFAnnotationManager
@@ -23,6 +29,24 @@
   if (self) {
     self.words = [NSMutableArray array];
     self.sentencesWords = [NSMutableArray array];
+    
+    HighlightStyle wordStyle = [ReaderDefaults wordHighlightStyle];
+    if (wordStyle == HighlightStyleBackgroundColor) {
+      self.wordAnnotationType = PDFAnnotationSubtypeHighlight;
+    } else {
+      self.wordAnnotationType = PDFAnnotationSubtypeUnderline;
+    }
+    
+    HighlightStyle sentenceStyle = [ReaderDefaults sentenceHighlightStyle];
+    if (sentenceStyle == HighlightStyleUnderline) {
+      self.sentenceAnnotationType = PDFAnnotationSubtypeUnderline;
+    } else {
+      self.sentenceAnnotationType = PDFAnnotationSubtypeHighlight;
+    }
+    
+    self.wordColor = [ReaderDefaults preferedWordHighlightColor].color;
+    self.sentenceColor = [ReaderDefaults preferedSentenceHighlightColor].color;
+    
   }
   return self;
 }
@@ -30,12 +54,12 @@
 #pragma mark - Public
 
 - (void)addWordAnnotationToPage:(PDFPage *)page withRange:(NSRange)range {
-  PDFAnnotation *wordAnnotation = [self addAnnotationsToPage:page withRanges:@[[NSValue valueWithRange:range]] color:[UIColor yellowColor] annotationType:PDFAnnotationSubtypeHighlight].firstObject;
+  PDFAnnotation *wordAnnotation = [self addAnnotationsToPage:page withRanges:@[[NSValue valueWithRange:range]] color:self.wordColor annotationType:self.wordAnnotationType].firstObject;
   [self.words addObject:wordAnnotation];
 }
 
 - (void)addSentenceAnnotationToPage:(PDFPage *)page withRangeValues:(NSArray<NSValue *> *)ranges {
-  NSArray<PDFAnnotation *> *sentenceWords = [self addAnnotationsToPage:page withRanges:ranges color:[[UIColor magentaColor] colorWithAlphaComponent:0.3] annotationType:PDFAnnotationSubtypeUnderline];
+  NSArray<PDFAnnotation *> *sentenceWords = [self addAnnotationsToPage:page withRanges:ranges color:[self.sentenceColor colorWithAlphaComponent:0.75] annotationType:self.sentenceAnnotationType];
   [self.sentencesWords addObject:sentenceWords];
 }
 

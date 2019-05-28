@@ -18,8 +18,8 @@ typedef NS_ENUM(NSUInteger, DefaultHighlightContent) {
 };
 
 typedef NS_ENUM(NSUInteger, HighlightStyle) {
-  HighlightStyleBackgroundColor,
   HighlightStyleUnderline,
+  HighlightStyleBackgroundColor,
 };
 
 @interface ReaderDefaults : NSObject

@@ -95,7 +95,7 @@ static NSString *const ReaderDefaultsWordHighlightColor = @"ReaderDefaultsWordHi
 + (DefaultHighlightContent)defaultHighlightContent {
   NSInteger highlightContent = [NSUserDefaults.standardUserDefaults integerForKey:ReaderDefaultsDefaultHighlightContent];
   if (!highlightContent || highlightContent == NSNotFound) {
-    highlightContent = DefaultHighlightContentWords;
+    return DefaultHighlightContentWords;
   }
   return highlightContent;
 }
@@ -106,9 +106,6 @@ static NSString *const ReaderDefaultsWordHighlightColor = @"ReaderDefaultsWordHi
 
 + (HighlightStyle)wordHighlightStyle {
   NSInteger highlightStyle = [NSUserDefaults.standardUserDefaults integerForKey:ReaderDefaultsWordHighlightStyle];
-  if (!highlightStyle || highlightStyle == NSNotFound) {
-    return HighlightStyleBackgroundColor;
-  }
   return highlightStyle;
 }
 
@@ -117,10 +114,7 @@ static NSString *const ReaderDefaultsWordHighlightColor = @"ReaderDefaultsWordHi
 }
 
 + (HighlightStyle)sentenceHighlightStyle {
-  NSInteger highlightStyle = [NSUserDefaults.standardUserDefaults integerForKey:ReaderDefaultsSentenceHighlightStyle];
-  if (!highlightStyle || highlightStyle == NSNotFound) {
-    return HighlightStyleUnderline;
-  }
+  HighlightStyle highlightStyle = [NSUserDefaults.standardUserDefaults integerForKey:ReaderDefaultsSentenceHighlightStyle];
   return highlightStyle;
 }
 
