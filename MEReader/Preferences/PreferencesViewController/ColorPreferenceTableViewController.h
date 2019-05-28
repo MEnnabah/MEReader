@@ -22,6 +22,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface ColorPreferenceTableViewController : UITableViewController
 
 @property (weak, nonatomic) id <ColorPreferencesTableViewControllerDelegate> delegate;
+@property (strong, nonatomic) HighlightColor *currentColor;
 
 @end
 

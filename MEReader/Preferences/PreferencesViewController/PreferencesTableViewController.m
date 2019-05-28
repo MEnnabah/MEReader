@@ -28,21 +28,14 @@
   
   wordColorPreferenceViewControllerTitle = @"Word Color";
   sentenceColorPreferenceViewControllerTitle = @"Sentence Color";
+  
+  [self updateLabel:self.wordLabel highlightColor:[ReaderDefaults preferedWordHighlightColor] style:[ReaderDefaults wordHighlightStyle]];
+  [self updateLabel:self.sentenceLabel highlightColor:[ReaderDefaults preferedSentenceHighlightColor] style:[ReaderDefaults sentenceHighlightStyle]];
 }
 
 
 
 #pragma mark - Table view data source
-
-/*
- - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
- UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:<#@"reuseIdentifier"#> forIndexPath:indexPath];
- 
- // Configure the cell...
- 
- return cell;
- }
- */
 
 
 #pragma mark - Table view delegate
@@ -65,8 +58,10 @@
     colorPref.delegate = self;
     if ([identifier isEqualToString:@"wordHighlightColorSegue"]) {
       colorPref.title = wordColorPreferenceViewControllerTitle;
+      colorPref.currentColor = [ReaderDefaults preferedWordHighlightColor];
     } else if ([identifier isEqualToString:@"sentenceHighlightColorSegue"]) {
       colorPref.title = sentenceColorPreferenceViewControllerTitle;
+      colorPref.currentColor = [ReaderDefaults preferedSentenceHighlightColor];
     }
   }
 }
@@ -74,23 +69,25 @@
 - (void)colorPreferenceTableViewController:(nonnull ColorPreferenceTableViewController *)viewController didSelectColor:(nonnull HighlightColor *)color {
   // update cache
   if ([viewController.title isEqualToString:wordColorPreferenceViewControllerTitle]) {
-    [self updateLabel:self.wordLabel highlightColor:color.color named:color.name style:[ReaderDefaults wordHighlightStyle]];
+    [self updateLabel:self.wordLabel highlightColor:color style:[ReaderDefaults wordHighlightStyle]];
+    [ReaderDefaults setPreferedWordHighlightColor:color];
   } else if ([viewController.title isEqualToString:sentenceColorPreferenceViewControllerTitle]) {
-    [self updateLabel:self.sentenceLabel highlightColor:color.color named:color.name style:[ReaderDefaults sentenceHighlightStyle]];
+    [self updateLabel:self.sentenceLabel highlightColor:color style:[ReaderDefaults sentenceHighlightStyle]];
+    [ReaderDefaults setPreferedSentenceHighlightColor:color];
   }
 }
 
-- (void)updateLabel:(UILabel *)label highlightColor:(UIColor *)color named:(NSString *)name style:(HighlightStyle)style {
+- (void)updateLabel:(UILabel *)label highlightColor:(HighlightColor *)color style:(HighlightStyle)style {
   NSMutableDictionary<NSAttributedStringKey, id> *attributes = [NSMutableDictionary dictionary];
   
   if (style == HighlightStyleUnderline) {
     [attributes setObject:[NSNumber numberWithDouble:2.0] forKey:NSUnderlineStyleAttributeName];
-    [attributes setObject:color forKey:NSUnderlineColorAttributeName];
+    [attributes setObject:color.color forKey:NSUnderlineColorAttributeName];
   } else if (style == HighlightStyleBackgroundColor) {
-    [attributes setObject:color forKey:NSBackgroundColorAttributeName];
+    [attributes setObject:color.color forKey:NSBackgroundColorAttributeName];
   }
   
-  NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString:name attributes:attributes];
+  NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString:color.name attributes:attributes];
   label.attributedText = attributedString;
 }
 

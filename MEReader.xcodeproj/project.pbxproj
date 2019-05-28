@@ -214,8 +214,8 @@
 		5067E870229B1DE300C47421 /* Preferences */ = {
 			isa = PBXGroup;
 			children = (
+				5067E87F229B3CD300C47421 /* View */,
 				5067E884229B3FE200C47421 /* Model */,
-				5067E879229B3BE200C47421 /* ColorPreferences */,
 				5067E878229B3BD300C47421 /* PreferencesViewController */,
 				5067E876229B2ACC00C47421 /* PreferencesStoryboard.storyboard */,
 			);
@@ -227,27 +227,10 @@
 			children = (
 				5067E871229B1F7D00C47421 /* PreferencesTableViewController.h */,
 				5067E872229B1F7D00C47421 /* PreferencesTableViewController.m */,
-			);
-			path = PreferencesViewController;
-			sourceTree = "<group>";
-		};
-		5067E879229B3BE200C47421 /* ColorPreferences */ = {
-			isa = PBXGroup;
-			children = (
-				5067E88B229B763200C47421 /* Model */,
-				5067E87F229B3CD300C47421 /* View */,
-				5067E87E229B3CC300C47421 /* ViewController */,
-			);
-			path = ColorPreferences;
-			sourceTree = "<group>";
-		};
-		5067E87E229B3CC300C47421 /* ViewController */ = {
-			isa = PBXGroup;
-			children = (
 				5067E87B229B3C1800C47421 /* ColorPreferenceTableViewController.h */,
 				5067E87C229B3C1800C47421 /* ColorPreferenceTableViewController.m */,
 			);
-			path = ViewController;
+			path = PreferencesViewController;
 			sourceTree = "<group>";
 		};
 		5067E87F229B3CD300C47421 /* View */ = {
@@ -264,13 +247,6 @@
 			children = (
 				5067E885229B3FFF00C47421 /* ReaderDefaults.h */,
 				5067E886229B3FFF00C47421 /* ReaderDefaults.m */,
-			);
-			path = Model;
-			sourceTree = "<group>";
-		};
-		5067E88B229B763200C47421 /* Model */ = {
-			isa = PBXGroup;
-			children = (
 				5067E88C229B763F00C47421 /* HighlightColor.h */,
 				5067E88D229B763F00C47421 /* HighlightColor.m */,
 			);

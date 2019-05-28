@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "HighlightColor.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -23,15 +24,8 @@ typedef NS_ENUM(NSUInteger, HighlightStyle) {
 
 @interface ReaderDefaults : NSObject
 
-@property (class, assign, nonatomic) DefaultHighlightContent defaultHighlightContent;
-@property (class, assign, nonatomic) HighlightStyle wordHighlightStyle;
-@property (class, assign, nonatomic) HighlightStyle sentenceHighlightStyle;
-
 + (void)syncAvailableHighlightColors;
-+ (NSDictionary *)availableHighlightColors;
-
-+ (NSDictionary *)preferedWordHighlightColor;
-+ (NSDictionary *)preferedSentenceHighlightColor;
++ (NSArray<HighlightColor *> *)availableHighlightColors;
 
 + (DefaultHighlightContent)defaultHighlightContent;
 + (void)setDefaultHighlightContent:(DefaultHighlightContent)defaultHighlightContent;
@@ -41,6 +35,12 @@ typedef NS_ENUM(NSUInteger, HighlightStyle) {
 
 + (HighlightStyle)sentenceHighlightStyle;
 + (void)setSentenceHighlightStyle:(HighlightStyle)sentenceHighlightStyle;
+
++ (HighlightColor *)preferedWordHighlightColor;
++ (void)setPreferedWordHighlightColor:(HighlightColor *)color;
+
++ (HighlightColor *)preferedSentenceHighlightColor;
++ (void)setPreferedSentenceHighlightColor:(HighlightColor *)color;
 
 @end
 

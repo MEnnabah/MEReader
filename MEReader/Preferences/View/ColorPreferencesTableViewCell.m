@@ -18,7 +18,9 @@
 @implementation ColorPreferencesTableViewCell
 
 - (void)awakeFromNib {
-    [super awakeFromNib];
+  [super awakeFromNib];
+  
+  self.selectionStyle = UITableViewCellSelectionStyleNone;
   
   self.colorIndicatorView.layer.cornerRadius = self.colorIndicatorView.frame.size.height / 2;
   self.colorIndicatorView.layer.masksToBounds = YES;
@@ -26,9 +28,8 @@
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
-    [super setSelected:selected animated:animated];
-
-    // Configure the view for the selected state
+  [super setSelected:selected animated:animated];
+  self.accessoryType = selected ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
 }
 
 - (NSString *)colorName {

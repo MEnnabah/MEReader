@@ -11,7 +11,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface HighlightColor : NSObject
+@interface HighlightColor : NSObject<NSCoding>
 
 @property (strong, nonatomic) UIColor *color;
 @property (copy, nonatomic) NSString *name;

@@ -19,4 +19,19 @@
   return self;
 }
 
+- (void)encodeWithCoder:(NSCoder *)coder {
+  [coder encodeObject:self.name forKey:@"name"];
+  [coder encodeObject:self.color forKey:@"color"];
+}
+
+- (instancetype)initWithCoder:(NSCoder *)aDecoder {
+  if (self = [super init]) {
+    self.name = [aDecoder decodeObjectForKey:@"name"];
+    self.color = [aDecoder decodeObjectForKey:@"color"];
+  }
+  return self;
+}
+
+
+
 @end
